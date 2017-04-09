@@ -24,7 +24,17 @@ public class Categorie {
         Log.d("Android: ",id + " " + categorieID + " " + denumire + " " + raion + " " + raft);
     }
 
-    public String getDenumire(){
-        return denumire;
-    }
+    public String getDenumire(){return denumire;}
+    public int getId(){ return this.id;}
+    public int getCategorieID(){return this.categorieID;}
+    public int getRaion(){return this.raion;}
+    public int getRaft(){return this.raft;}
+
+    public void setId(int i){this.id  = i;}
+    public void setCategorieID(int i){this.categorieID = i;}
+    public void setDenumire(String s){this.denumire = s;}
+    public void setRaion(int r){this.raion = r;}
+    public void setRaft(int r){this.raft = r;}
+
+
 }

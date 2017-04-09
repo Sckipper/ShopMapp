@@ -1,10 +1,13 @@
 package sz.shopmapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -20,6 +23,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -33,8 +38,14 @@ public class SearchActivity extends Activity {
     EditText inputSearch;
 
 
-    private String urlJsonObj = "https://apex.oracle.com/pls/apex/shopmap/odbt/categorie";
+    private String urlJsonObjCateg = "https://apex.oracle.com/pls/apex/shopmap/odbt/categorie";
+    private String urlJsonObjProdus = "https://apex.oracle.com/pls/apex/shopmap/odbt/produs";
     ArrayList<String> products;
+
+    public static ArrayList<Categorie> categorieArrayList;
+    public static ArrayList<Produs> produsArrayList;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -46,6 +57,16 @@ public class SearchActivity extends Activity {
 
         adapter = new ArrayAdapter<String>(this, R.layout.list_item, R.id.product_name, products);
         lv.setAdapter(adapter);
+
+        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String c = (String) parent.getItemAtPosition(position);
+                Toast.makeText(getBaseContext(), c, Toast.LENGTH_SHORT).show();
+                Intent myIntent = new Intent(view.getContext(), ProductDetailsActivity.class);
+                myIntent.putExtra("produs", c);
+                startActivityForResult(myIntent, 0);
+            }
+        });
 
         inputSearch.addTextChangedListener(new TextWatcher() {
 
@@ -68,22 +89,52 @@ public class SearchActivity extends Activity {
                 // TODO Auto-generated method stub
             }
         });
-        makeJsonObjectRequest();
+        makeJsonObjectCategorieRequest();
     }
 
-    private void makeJsonObjectRequest() {
+    private void makeJsonObjectCategorieRequest() {
 
         JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                urlJsonObj, null, new Response.Listener<JSONObject>() {
+                urlJsonObjCateg, null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
                 try {
-                    ArrayList<Categorie> arlCat = JsonTool.parseCategorieJSONData(response);
-                    for (Categorie c:arlCat
-                         ) {
-                        products.add(c.getDenumire());
-                    }
+                    categorieArrayList = JsonTool.parseCategorieJSONData(response);
+                    //adapter.notifyDataSetChanged();
+                    makeJsonObjectProduseRequest();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Android ", "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                // hide the progress dialog
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+
+    private void makeJsonObjectProduseRequest() {
+
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                urlJsonObjProdus, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    produsArrayList = JsonTool.parseProduseJSONData(response);
+                    ///
+                    OrdonareListe();
                     adapter.notifyDataSetChanged();
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -104,5 +155,28 @@ public class SearchActivity extends Activity {
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+
+
+    private void OrdonareListe() {
+        for (Produs p:produsArrayList
+             ) {
+            for (Categorie c:categorieArrayList
+                 ) {
+                if(c.getId() == p.getCategorieID()){
+                    p.setDenumire(c.getDenumire() + " - " + p.getDenumire());
+                }
+            }
+        }
+
+        for (Categorie c:categorieArrayList
+             ) {
+            products.add(c.getDenumire());
+        }
+        for (Produs p:produsArrayList
+                ) {
+            products.add(p.getDenumire());
+        }
+        Collections.sort(products);
     }
 }

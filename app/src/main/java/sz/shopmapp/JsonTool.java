@@ -1,6 +1,7 @@
 package sz.shopmapp;
 
 import android.app.Activity;
+import android.app.ExpandableListActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
@@ -73,5 +74,36 @@ public class JsonTool {
             Log.d("Android: ",e.toString());
         }
         return arlCategorie;
+    }
+
+    public static ArrayList<Produs> parseProduseJSONData(JSONObject object){
+        ArrayList<Produs> arlProdus = new ArrayList<>();
+        try {
+            JSONArray ja = object.getJSONArray("items");
+            for(int i = 0; i < ja.length(); i++) {
+                JSONObject job = ja.getJSONObject(i);
+                String greutate,dataexp,descr;
+                try{
+                    greutate = job.getString("greutate");
+                }catch (Exception e){
+                    greutate = "";
+                }
+                try{
+                    dataexp = job.getString("dataexpirare");
+                }catch (Exception e){
+                    dataexp = "";
+                }
+                try{
+                    descr = job.getString("descriere");
+                }catch (Exception e){
+                    descr = "";
+                }
+                arlProdus.add(new Produs(job.getInt("id"),job.getInt("categorieid"),job.getString("denumire"),job.getDouble("pret"),job.getDouble("cantitate"),greutate,dataexp,descr));
+            }
+        }catch (Exception e){
+            Log.d("Android: ",e.toString());
+        }
+        return arlProdus;
+
     }
 }
