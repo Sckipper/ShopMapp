@@ -37,8 +37,6 @@ public class JsonTool {
             @Override
             public void onResponse(String string) {
                 JSONText = string;
-                arlCat = parseCategorieJSONData();
-                apel();
             }
         }, new Response.ErrorListener() {
             @Override
@@ -50,14 +48,10 @@ public class JsonTool {
         rQueue.add(request);
     }
 
-    public ArrayList<Categorie> apel(){
-        return arlCat;
-    }
 
-    public ArrayList<Categorie> parseCategorieJSONData() {
+    public static ArrayList<Categorie> parseCategorieJSONData(JSONObject object) {
         ArrayList<Categorie> arlCategorie = new ArrayList<>();
         try {
-            JSONObject object = new JSONObject(JSONText);
             JSONArray ja = object.getJSONArray("items");
             for(int i = 0; i < ja.length(); i++) {
                 JSONObject job = ja.getJSONObject(i);

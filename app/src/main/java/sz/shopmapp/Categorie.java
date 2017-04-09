@@ -23,4 +23,8 @@ public class Categorie {
     public void Show(){
         Log.d("Android: ",id + " " + categorieID + " " + denumire + " " + raion + " " + raft);
     }
+
+    public String getDenumire(){
+        return denumire;
+    }
 }

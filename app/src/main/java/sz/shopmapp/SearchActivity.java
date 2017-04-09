@@ -8,6 +8,16 @@ import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
+
+import com.android.volley.Request;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.JsonObjectRequest;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,20 +29,18 @@ import java.util.HashMap;
 public class SearchActivity extends Activity {
 
     private ListView lv;
-
     ArrayAdapter<String> adapter;
-
     EditText inputSearch;
 
-    ArrayList<HashMap<String, String>> productList;
 
+    private String urlJsonObj = "https://apex.oracle.com/pls/apex/shopmap/odbt/categorie";
+    ArrayList<String> products;
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cauta_produs);
-
-        String products[] = {"asdasdad",""} ;
+        products = new ArrayList<>();
         lv = (ListView) findViewById(R.id.list_view);
         inputSearch = (EditText) findViewById(R.id.inputSearch);
 
@@ -60,9 +68,41 @@ public class SearchActivity extends Activity {
                 // TODO Auto-generated method stub
             }
         });
+        makeJsonObjectRequest();
+    }
 
-        JsonTool jt = new JsonTool("https://apex.oracle.com/pls/apex/shopmap/odbt/categorie",this);
-        jt.GetCategorieData();
+    private void makeJsonObjectRequest() {
 
+        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
+                urlJsonObj, null, new Response.Listener<JSONObject>() {
+
+            @Override
+            public void onResponse(JSONObject response) {
+                try {
+                    ArrayList<Categorie> arlCat = JsonTool.parseCategorieJSONData(response);
+                    for (Categorie c:arlCat
+                         ) {
+                        products.add(c.getDenumire());
+                    }
+                    adapter.notifyDataSetChanged();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),
+                            "Error: " + e.getMessage(),
+                            Toast.LENGTH_LONG).show();
+                }
+            }
+        }, new Response.ErrorListener() {
+
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                VolleyLog.d("Android ", "Error: " + error.getMessage());
+                Toast.makeText(getApplicationContext(),
+                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                // hide the progress dialog
+            }
+        });
+        // Adding request to request queue
+        AppController.getInstance().addToRequestQueue(jsonObjReq);
     }
 }
