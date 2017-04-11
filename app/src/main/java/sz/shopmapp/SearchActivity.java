@@ -22,10 +22,12 @@ import com.android.volley.toolbox.JsonObjectRequest;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by tavi2 on 08.04.2017.
@@ -41,6 +43,8 @@ public class SearchActivity extends Activity {
     private String urlJsonObjCateg = "https://apex.oracle.com/pls/apex/shopmap/odbt/categorie";
     private String urlJsonObjProdus = "https://apex.oracle.com/pls/apex/shopmap/odbt/produs";
     ArrayList<String> products;
+    ArrayList<String> productsType;
+    ArrayList<Integer> productsID;
 
     public static ArrayList<Categorie> categorieArrayList;
     public static ArrayList<Produs> produsArrayList;
@@ -52,6 +56,8 @@ public class SearchActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cauta_produs);
         products = new ArrayList<>();
+        productsID = new ArrayList<>();
+        productsType = new ArrayList<>();
         lv = (ListView) findViewById(R.id.list_view);
         inputSearch = (EditText) findViewById(R.id.inputSearch);
 
@@ -63,7 +69,8 @@ public class SearchActivity extends Activity {
                 String c = (String) parent.getItemAtPosition(position);
                 Toast.makeText(getBaseContext(), c, Toast.LENGTH_SHORT).show();
                 Intent myIntent = new Intent(view.getContext(), ProductDetailsActivity.class);
-                myIntent.putExtra("produs", c);
+                myIntent.putExtra("type", productsType.get(position));
+                myIntent.putExtra("id", productsID.get(position));
                 startActivityForResult(myIntent, 0);
             }
         });
@@ -135,7 +142,7 @@ public class SearchActivity extends Activity {
                     produsArrayList = JsonTool.parseProduseJSONData(response);
                     ///
                     OrdonareListe();
-                    adapter.notifyDataSetChanged();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
@@ -157,26 +164,41 @@ public class SearchActivity extends Activity {
         AppController.getInstance().addToRequestQueue(jsonObjReq);
     }
 
-
     private void OrdonareListe() {
-        for (Produs p:produsArrayList
+
+        for (Categorie c:categorieArrayList
              ) {
-            for (Categorie c:categorieArrayList
-                 ) {
-                if(c.getId() == p.getCategorieID()){
-                    p.setDenumire(c.getDenumire() + " - " + p.getDenumire());
+            if(c.getCategorieID() == 0){
+                products.add(c.getDenumire());
+                productsType.add("categorie");
+                productsID.add(c.getId());
+                for (Categorie c1:categorieArrayList
+                     ) {
+                    if(c1.getCategorieID() == c.getId()){
+                        products.add("    " + c1.getDenumire());
+                        productsType.add("categorie");
+                        productsID.add(c1.getId());
+                        for (Produs p:produsArrayList
+                             ) {
+                            if(p.getCategorieID() == c1.getId())
+                                products.add("        " + p.getDenumire());
+                                productsType.add("produs");
+                                productsID.add(p.getId());
+                        }
+                    }
                 }
             }
         }
-
+        /*
         for (Categorie c:categorieArrayList
              ) {
             products.add(c.getDenumire());
         }
         for (Produs p:produsArrayList
                 ) {
-            products.add(p.getDenumire());
-        }
-        Collections.sort(products);
+            products.add("    " + p.getDenumire());
+        }*/
+        //Collections.sort(products);
+        adapter.notifyDataSetChanged();
     }
 }

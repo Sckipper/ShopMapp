@@ -104,6 +104,5 @@ public class JsonTool {
             Log.d("Android: ",e.toString());
         }
         return arlProdus;
-
     }
 }

@@ -21,11 +21,11 @@ public class ProductDetailsActivity extends Activity {
         EditText et = (EditText) findViewById(R.id.editText);
 
         et.setText(getIntent().getExtras().getString("produs"));
-        Categorie c = Search(getIntent().getExtras().getString("produs"),SearchActivity.categorieArrayList);
+        Categorie c = Search(getIntent().getExtras().getString("produs"),SearchActivity.categorieArrayList,SearchActivity.produsArrayList);
         Log.d("Android: ", Integer.toString(c.getRaion()));
     }
 
-    public Categorie Search(String caut, ArrayList<Categorie> arlCat){
+    public Categorie Search(String caut, ArrayList<Categorie> arlCat, ArrayList<Produs> arlProd){
         for (Categorie c: arlCat
              ) {
             if(c.getDenumire().equals(caut))
