@@ -17,6 +17,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.VolleyLog;
+import com.android.volley.toolbox.AndroidAuthenticator;
 import com.android.volley.toolbox.JsonObjectRequest;
 
 import org.json.JSONException;
@@ -69,8 +70,9 @@ public class SearchActivity extends Activity {
                 String c = (String) parent.getItemAtPosition(position);
                 Toast.makeText(getBaseContext(), c, Toast.LENGTH_SHORT).show();
                 Intent myIntent = new Intent(view.getContext(), ProductDetailsActivity.class);
-                myIntent.putExtra("type", productsType.get(position));
-                myIntent.putExtra("id", productsID.get(position));
+                int newPos = products.indexOf(c);
+                myIntent.putExtra("type", productsType.get(newPos));
+                myIntent.putExtra("id", productsID.get(newPos));
                 startActivityForResult(myIntent, 0);
             }
         });
@@ -165,7 +167,8 @@ public class SearchActivity extends Activity {
     }
 
     private void OrdonareListe() {
-
+        productsID = new ArrayList<>();
+        productsType = new ArrayList<>();
         for (Categorie c:categorieArrayList
              ) {
             if(c.getCategorieID() == 0){
@@ -180,10 +183,12 @@ public class SearchActivity extends Activity {
                         productsID.add(c1.getId());
                         for (Produs p:produsArrayList
                              ) {
-                            if(p.getCategorieID() == c1.getId())
+                            if(p.getCategorieID() == c1.getId()) {
                                 products.add("        " + p.getDenumire());
                                 productsType.add("produs");
                                 productsID.add(p.getId());
+                                //Log.d("Android: ", "idsc:" + c1.getId() + " idc:" + c.getId() + "pid:" + p.getId() + "pden:" + p.getDenumire() + "c1den:" + c1.getDenumire() + "cden:" + c.getDenumire());
+                            }
                         }
                     }
                 }
@@ -199,6 +204,7 @@ public class SearchActivity extends Activity {
             products.add("    " + p.getDenumire());
         }*/
         //Collections.sort(products);
+
         adapter.notifyDataSetChanged();
     }
 }
