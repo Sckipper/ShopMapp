@@ -15,8 +15,9 @@ public class Produs {
     String greutate;
     String dataExpirare;
     String descriere;
+    String imagine;
 
-    public Produs(int i, int ci, String den, double p, double ca, String g, String de, String des){
+    public Produs(int i, int ci, String den, double p, double ca, String g, String de, String des,String img){
         id = i;
         categorieID = ci;
         denumire = den;
@@ -25,6 +26,7 @@ public class Produs {
         greutate = g;
         dataExpirare = de;
         descriere = des;
+        imagine = img;
     }
 
     public void Show(){
@@ -39,6 +41,7 @@ public class Produs {
     public String getGreutate(){return this.greutate;}
     public String getDataExpirare(){return this.dataExpirare;}
     public String getDescriere(){return this.descriere;}
+    public String getImagine(){return this.imagine;}
 
     public void setId(int i){this.id  = i;}
     public void setCategorieID(int i){this.categorieID = i;}
@@ -48,4 +51,5 @@ public class Produs {
     public void setGreutate(String s){this.greutate = s;}
     public void setDataExpirare(String s){this.dataExpirare = s;}
     public void setDescriere(String s){this.descriere = s;}
+    public void setImagine(String s){this.imagine = s;}
 }

@@ -1,6 +1,8 @@
 package sz.shopmapp;
 
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -18,6 +20,7 @@ import org.json.JSONObject;
 
 public class MainActivity extends AppCompatActivity {
     Button btnCautaProdus;
+    boolean dataFetchReady = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -25,41 +28,49 @@ public class MainActivity extends AppCompatActivity {
 
 
         btnCautaProdus = (Button) findViewById(R.id.button);
-        btnCautaProdus.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), SearchActivity.class);
-                startActivityForResult(myIntent, 0);
-            }
-        });
-
-        Button btnTest = (Button) findViewById(R.id.button3);
-        btnTest.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), GenerareImagine.class);
-                startActivityForResult(myIntent, 0);
-            }
-        });
-
-        Button btnListaCumparaturi = (Button) findViewById(R.id.button2);
-        btnListaCumparaturi.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-                Log.d("Android: ","Categorii:");
-                for (Categorie c:ListaDeCumparaturi.listaCategorii
-                     ) {
-                    Log.d("Android: ",c.getDenumire());
+        if(isNetworkAvailable() == true) {
+            btnCautaProdus.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    if (dataFetchReady == true) {
+                        Intent myIntent = new Intent(view.getContext(), SearchActivity.class);
+                        startActivityForResult(myIntent, 0);
+                    } else {
+                        Toast.makeText(getBaseContext(), "Inca se preiau datele", Toast.LENGTH_SHORT).show();
+                    }
                 }
-                Log.d("Android: ","Produse:");
-                for (Produs p:ListaDeCumparaturi.listaProduse
-                        ) {
-                    Log.d("Android: ",p.getDenumire());
-                }
-            }
-        });
+            });
 
-        InitializareObiecte();
+            Button btnTest = (Button) findViewById(R.id.button3);
+            btnTest.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent myIntent = new Intent(view.getContext(), GenerareImagine.class);
+                    startActivityForResult(myIntent, 0);
+
+                }
+            });
+
+            Button btnListaCumparaturi = (Button) findViewById(R.id.button2);
+            btnListaCumparaturi.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Log.d("Android: ", "Categorii:");
+                    for (Categorie c : ListaDeCumparaturi.listaCategorii
+                            ) {
+                        Log.d("Android: ", c.getDenumire());
+                    }
+                    Log.d("Android: ", "Produse:");
+                    for (Produs p : ListaDeCumparaturi.listaProduse
+                            ) {
+                        Log.d("Android: ", p.getDenumire());
+                    }
+                }
+            });
+
+            InitializareObiecte();
+        } else
+            Toast.makeText(getBaseContext(), "Nu exista conexiune la retea.Activeaza netu` si reincarca aplicatia", Toast.LENGTH_SHORT).show();
     }
 
     private String urlJsonObjCateg = "https://apex.oracle.com/pls/apex/shopmap/odbt/categorie";
@@ -110,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(JSONObject response) {
                 try {
                     SearchActivity.produsArrayList = JsonTool.parseProduseJSONData(response);
-
+                    dataFetchReady = true;
                 } catch (Exception e) {
                     e.printStackTrace();
                     Toast.makeText(getApplicationContext(),
@@ -130,5 +141,12 @@ public class MainActivity extends AppCompatActivity {
         });
         // Adding request to request queue
         AppController.getInstance().addToRequestQueue(jsonObjReq);
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(this.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }

@@ -61,7 +61,7 @@ public class JsonTool {
             JSONArray ja = object.getJSONArray("items");
             for(int i = 0; i < ja.length(); i++) {
                 JSONObject job = ja.getJSONObject(i);
-                String greutate,dataexp,descr;
+                String greutate,dataexp,descr,imag;
                 try{
                     greutate = job.getString("greutate");
                 }catch (Exception e){
@@ -77,7 +77,12 @@ public class JsonTool {
                 }catch (Exception e){
                     descr = "";
                 }
-                arlProdus.add(new Produs(job.getInt("id"),job.getInt("categorieid"),job.getString("denumire"),job.getDouble("pret"),job.getDouble("cantitate"),greutate,dataexp,descr));
+                try{
+                    imag = job.getString("imagine");
+                } catch (Exception e){
+                    imag = "";
+                }
+                arlProdus.add(new Produs(job.getInt("id"),job.getInt("categorieid"),job.getString("denumire"),job.getDouble("pret"),job.getDouble("cantitate"),greutate,dataexp,descr,imag));
             }
         }catch (Exception e){
             Log.d("Android: ",e.toString());

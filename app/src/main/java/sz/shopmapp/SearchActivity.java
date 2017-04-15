@@ -66,7 +66,7 @@ public class SearchActivity extends Activity {
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String c = (String) parent.getItemAtPosition(position);
-                Toast.makeText(getBaseContext(), c, Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getBaseContext(), c, Toast.LENGTH_SHORT).show();
                 Intent myIntent = new Intent(view.getContext(), ProductDetailsActivity.class);
                 int newPos = products.indexOf(c);
                 myIntent.putExtra("type", productsType.get(newPos));
