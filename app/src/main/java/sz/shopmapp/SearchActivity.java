@@ -40,9 +40,6 @@ public class SearchActivity extends Activity {
     ArrayAdapter<String> adapter;
     EditText inputSearch;
 
-
-    private String urlJsonObjCateg = "https://apex.oracle.com/pls/apex/shopmap/odbt/categorie";
-    private String urlJsonObjProdus = "https://apex.oracle.com/pls/apex/shopmap/odbt/produs";
     ArrayList<String> products;
     ArrayList<String> productsType;
     ArrayList<Integer> productsID;
@@ -59,6 +56,7 @@ public class SearchActivity extends Activity {
         products = new ArrayList<>();
         productsID = new ArrayList<>();
         productsType = new ArrayList<>();
+
         lv = (ListView) findViewById(R.id.list_view);
         inputSearch = (EditText) findViewById(R.id.inputSearch);
 
@@ -98,77 +96,10 @@ public class SearchActivity extends Activity {
                 // TODO Auto-generated method stub
             }
         });
-        makeJsonObjectCategorieRequest();
-    }
-
-    private void makeJsonObjectCategorieRequest() {
-
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                urlJsonObjCateg, null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    categorieArrayList = JsonTool.parseCategorieJSONData(response);
-                    //adapter.notifyDataSetChanged();
-                    makeJsonObjectProduseRequest();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Android ", "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-                // hide the progress dialog
-            }
-        });
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
-    }
-
-    private void makeJsonObjectProduseRequest() {
-
-        JsonObjectRequest jsonObjReq = new JsonObjectRequest(Request.Method.GET,
-                urlJsonObjProdus, null, new Response.Listener<JSONObject>() {
-
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    produsArrayList = JsonTool.parseProduseJSONData(response);
-                    ///
-                    OrdonareListe();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                    Toast.makeText(getApplicationContext(),
-                            "Error: " + e.getMessage(),
-                            Toast.LENGTH_LONG).show();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                VolleyLog.d("Android ", "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
-                // hide the progress dialog
-            }
-        });
-        // Adding request to request queue
-        AppController.getInstance().addToRequestQueue(jsonObjReq);
+        OrdonareListe();
     }
 
     private void OrdonareListe() {
-        productsID = new ArrayList<>();
-        productsType = new ArrayList<>();
         for (Categorie c:categorieArrayList
              ) {
             if(c.getCategorieID() == 0){
@@ -194,17 +125,6 @@ public class SearchActivity extends Activity {
                 }
             }
         }
-        /*
-        for (Categorie c:categorieArrayList
-             ) {
-            products.add(c.getDenumire());
-        }
-        for (Produs p:produsArrayList
-                ) {
-            products.add("    " + p.getDenumire());
-        }*/
-        //Collections.sort(products);
-
         adapter.notifyDataSetChanged();
     }
 }

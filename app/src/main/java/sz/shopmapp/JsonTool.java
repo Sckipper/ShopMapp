@@ -23,32 +23,11 @@ import java.util.ArrayList;
  */
 
 public class JsonTool {
-    String JSONText;
-    String uri = "https://apex.oracle.com/pls/apex/shopmap/odbt/categorie";
     Activity currentActivity;
-    public ArrayList<Categorie> arlCat;
 
-    public JsonTool(String u, Activity ca) {
-        uri = u;
+    public JsonTool(Activity ca) {
         currentActivity = ca;
     }
-
-    public void GetCategorieData(){
-        StringRequest request = new StringRequest(uri, new Response.Listener<String>() {
-            @Override
-            public void onResponse(String string) {
-                JSONText = string;
-            }
-        }, new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-                Log.d("Android: ", volleyError.getMessage());
-            }
-        });
-        RequestQueue rQueue = Volley.newRequestQueue(currentActivity);
-        rQueue.add(request);
-    }
-
 
     public static ArrayList<Categorie> parseCategorieJSONData(JSONObject object) {
         ArrayList<Categorie> arlCategorie = new ArrayList<>();

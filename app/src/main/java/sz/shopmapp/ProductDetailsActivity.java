@@ -22,6 +22,7 @@ import java.util.Collections;
 public class ProductDetailsActivity extends Activity {
     Produs produsCurent = null;
     Categorie categorieCurenta = null;
+    String type;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -31,6 +32,8 @@ public class ProductDetailsActivity extends Activity {
         TextView TextViewType = (TextView) findViewById(R.id.view_prod_type);
         TextView TextViewDenumire = (TextView) findViewById(R.id.view_prod_name);
         TextView TextViewLoc = (TextView) findViewById(R.id.view_prod_location);
+        Button btnAddToShopList = (Button) findViewById(R.id.btn_addShopList);
+
 
         String type = getIntent().getExtras().getString("type");
         Integer id = getIntent().getExtras().getInt("id");
@@ -40,20 +43,26 @@ public class ProductDetailsActivity extends Activity {
             TextViewType.setText(type);
             TextViewDenumire.setText(produsCurent.getDenumire());
             TextViewLoc.setText(getLocatie(SearchActivity.categorieArrayList));
+            btnAddToShopList.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    if(ListaDeCumparaturi.ExistaProdusInLista(produsCurent) == -1)
+                        ListaDeCumparaturi.adaugaProdus(produsCurent);
+                }
+            });
+
         }else if(categorieCurenta != null){
             TextViewType.setText(type);
             TextViewDenumire.setText(categorieCurenta.getDenumire());
             TextViewLoc.setText(categorieCurenta.getRaion() + " ... " + categorieCurenta.getRaft());
+            btnAddToShopList.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View view) {
+                    if (ListaDeCumparaturi.ExistaCategorieInLista(categorieCurenta) == -1)
+                        ListaDeCumparaturi.adaugaCategorie(categorieCurenta);
+                }
+            });
         }
-
-
-        Button btnAddToShopList = (Button) findViewById(R.id.btn_addShopList);
-        btnAddToShopList.setOnClickListener(new View.OnClickListener(){
-            @Override
-            public void onClick(View view) {
-
-            }
-        });
     }
 
     public void Search(ArrayList<Categorie> arlCat, ArrayList<Produs> arlProd, String type, int id){
