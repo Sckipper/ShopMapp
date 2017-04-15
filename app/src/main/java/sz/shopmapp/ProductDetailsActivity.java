@@ -1,10 +1,14 @@
 package sz.shopmapp;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.w3c.dom.Text;
 
@@ -41,6 +45,15 @@ public class ProductDetailsActivity extends Activity {
             TextViewDenumire.setText(categorieCurenta.getDenumire());
             TextViewLoc.setText(categorieCurenta.getRaion() + " ... " + categorieCurenta.getRaft());
         }
+
+
+        Button btnAddToShopList = (Button) findViewById(R.id.btn_addShopList);
+        btnAddToShopList.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
     }
 
     public void Search(ArrayList<Categorie> arlCat, ArrayList<Produs> arlProd, String type, int id){
