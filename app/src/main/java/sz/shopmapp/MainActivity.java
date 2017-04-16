@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         btnCautaProdus = (Button) findViewById(R.id.button);
 
         final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
-        alertDialog.setMessage("Te rugam activeaza conexiunea la retea.");
+        alertDialog.setMessage("Te rugam activeaza conexiunea la internet.");
         alertDialog.setCancelable(false);
         if(!isNetworkAvailable()){
             alertDialog.show();

@@ -6,38 +6,39 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.view.View;
+import android.view.Display;
+import 	android.graphics.Point;
+
+import static android.R.attr.x;
+import static android.R.attr.y;
+import static android.graphics.Color.rgb;
 
 /**
  * Created by Sckipper on 15.04.2017.
  */
 
 public class CustomView extends View {
-    private Rect rectangle;
     private Paint paint;
 
     public CustomView(Context context) {
         super(context);
-        int x = 0;
-        int y = 0;
-        int sideLength = 200;
-
-        // create a rectangle that we'll draw later
-        rectangle = new Rect(x, y, sideLength, sideLength);
-
         // create the Paint and set its color
         paint = new Paint();
-
-
-        paint.setStyle(Paint.Style.FILL);
-        paint.setColor(Color.MAGENTA);
-
         // border
         paint.setStyle(Paint.Style.STROKE);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.parseColor("#444444"));
+        paint.setStrokeWidth(3);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
-        canvas.drawRect(rectangle, paint);
+        int w = canvas.getWidth();
+        int h = canvas.getHeight();
+        int splitWidth = 10;
+        int splitHeight = 20;
+        canvas.drawRect(new Rect(0, 0, w, h), paint);
+        for(int i=1;i<=w;i+= w/splitWidth)
+            for(int j=1;j<=h;j+=h/splitHeight)
+                canvas.drawRect(new Rect(i,j, w, h), paint);
     }
 }
