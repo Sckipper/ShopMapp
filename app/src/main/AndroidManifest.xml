@@ -20,9 +20,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".SearchActivity"></activity>
-        <activity android:name=".ProductDetailsActivity"></activity>
-        <activity android:name=".GenerareImagine"></activity>
+        <activity android:name=".SearchActivity" />
+        <activity android:name=".ProductDetailsActivity" />
+        <activity android:name=".GenerareImagine" />
+        <activity android:name=".ListaDeCumparaturiActivity"></activity>
     </application>
 
 </manifest>

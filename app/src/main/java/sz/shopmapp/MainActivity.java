@@ -92,6 +92,8 @@ public class MainActivity extends AppCompatActivity {
                         ) {
                     Log.d("Android: ", p.getDenumire());
                 }
+                Intent myIntent = new Intent(view.getContext(), ListaDeCumparaturiActivity.class);
+                startActivityForResult(myIntent, 0);
             }
         });
 
