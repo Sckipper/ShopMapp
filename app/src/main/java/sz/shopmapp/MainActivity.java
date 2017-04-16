@@ -9,6 +9,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
+//import android.content.DialogInterface;
+import android.app.AlertDialog;
 
 import com.android.volley.Request;
 import com.android.volley.Response;
@@ -25,52 +27,75 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-
         btnCautaProdus = (Button) findViewById(R.id.button);
-        if(isNetworkAvailable() == true) {
-            btnCautaProdus.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    if (dataFetchReady == true) {
-                        Intent myIntent = new Intent(view.getContext(), SearchActivity.class);
-                        startActivityForResult(myIntent, 0);
-                    } else {
-                        Toast.makeText(getBaseContext(), "Inca se preiau datele", Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
 
-            Button btnTest = (Button) findViewById(R.id.button3);
-            btnTest.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Intent myIntent = new Intent(view.getContext(), GenerareImagine.class);
+        final AlertDialog alertDialog = new AlertDialog.Builder(MainActivity.this).create();
+        alertDialog.setMessage("Te rugam activeaza conexiunea la retea.");
+        alertDialog.setCancelable(false);
+        if(!isNetworkAvailable()){
+            alertDialog.show();
+        }
+        Thread t = new Thread() {
+            @Override
+            public void run() {
+                try {
+                    //check if connected!
+
+                    while (!isNetworkAvailable()) {
+                        //Wait to connect
+                        Thread.sleep(500);
+                    }
+                    alertDialog.cancel();
+                    runMain();
+                } catch (Exception e) {
+                }
+            }
+        };
+        t.start();
+    }
+
+    public void runMain(){
+
+        btnCautaProdus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (dataFetchReady == true) {
+                    Intent myIntent = new Intent(view.getContext(), SearchActivity.class);
                     startActivityForResult(myIntent, 0);
-
+                } else {
+                    Toast.makeText(getBaseContext(), "Inca se preiau datele. Incearca putin mai tarziu", Toast.LENGTH_SHORT).show();
                 }
-            });
+            }
+        });
 
-            Button btnListaCumparaturi = (Button) findViewById(R.id.button2);
-            btnListaCumparaturi.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Log.d("Android: ", "Categorii:");
-                    for (Categorie c : ListaDeCumparaturi.listaCategorii
-                            ) {
-                        Log.d("Android: ", c.getDenumire());
-                    }
-                    Log.d("Android: ", "Produse:");
-                    for (Produs p : ListaDeCumparaturi.listaProduse
-                            ) {
-                        Log.d("Android: ", p.getDenumire());
-                    }
+        Button btnTest = (Button) findViewById(R.id.button3);
+        btnTest.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(view.getContext(), GenerareImagine.class);
+                startActivityForResult(myIntent, 0);
+
+            }
+        });
+
+        Button btnListaCumparaturi = (Button) findViewById(R.id.button2);
+        btnListaCumparaturi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("Android: ", "Categorii:");
+                for (Categorie c : ListaDeCumparaturi.listaCategorii
+                        ) {
+                    Log.d("Android: ", c.getDenumire());
                 }
-            });
+                Log.d("Android: ", "Produse:");
+                for (Produs p : ListaDeCumparaturi.listaProduse
+                        ) {
+                    Log.d("Android: ", p.getDenumire());
+                }
+            }
+        });
 
-            InitializareObiecte();
-        } else
-            Toast.makeText(getBaseContext(), "Nu exista conexiune la retea.Activeaza netu` si reincarca aplicatia", Toast.LENGTH_SHORT).show();
+        InitializareObiecte();
     }
 
     private String urlJsonObjCateg = "https://apex.oracle.com/pls/apex/shopmap/odbt/categorie";
