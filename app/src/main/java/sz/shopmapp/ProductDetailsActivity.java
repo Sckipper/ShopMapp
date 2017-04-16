@@ -2,6 +2,7 @@ package sz.shopmapp;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,8 @@ import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Collections;
+
+import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
 /**
  * Created by tavi2 on 09.04.2017.
@@ -46,8 +49,12 @@ public class ProductDetailsActivity extends Activity {
             btnAddToShopList.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    if(ListaDeCumparaturi.ExistaProdusInLista(produsCurent) == -1)
+                    if(ListaDeCumparaturi.ExistaProdusInLista(produsCurent) == -1){
                         ListaDeCumparaturi.adaugaProdus(produsCurent);
+                        customToast("Produs adaugat cu succes", "GREEN").show();
+                    }else {
+                        customToast("Produsul exista deja in lista", "RED").show();
+                    }
                 }
             });
 
@@ -58,11 +65,22 @@ public class ProductDetailsActivity extends Activity {
             btnAddToShopList.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
-                    if (ListaDeCumparaturi.ExistaCategorieInLista(categorieCurenta) == -1)
+                    if (ListaDeCumparaturi.ExistaCategorieInLista(categorieCurenta) == -1){
                         ListaDeCumparaturi.adaugaCategorie(categorieCurenta);
+                        customToast("Categorie adaugata cu succes", "GREEN").show();
+                    }else {
+                        customToast("Categoria exista deja in lista", "RED").show();
+                    }
                 }
             });
         }
+    }
+
+    public Toast customToast(String message, String textColor){
+        Toast toast = Toast.makeText(getBaseContext(), message, Toast.LENGTH_SHORT);
+        TextView view = (TextView) toast.getView().findViewById(android.R.id.message);
+        view.setTextColor(Color.parseColor(textColor));
+        return toast;
     }
 
     public void Search(ArrayList<Categorie> arlCat, ArrayList<Produs> arlProd, String type, int id){
