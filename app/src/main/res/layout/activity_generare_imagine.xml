@@ -4,10 +4,10 @@
     android:layout_height="fill_parent"
     android:orientation="vertical" >
 
-    <ImageView
+    <sz.shopmapp.ZoomableImageView
         android:id="@+id/imageEnhance"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scaleType="matrix"></ImageView>
+        android:scaleType="matrix"></sz.shopmapp.ZoomableImageView>
 
 </LinearLayout>
