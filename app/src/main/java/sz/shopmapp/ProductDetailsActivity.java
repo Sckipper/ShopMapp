@@ -32,9 +32,9 @@ public class ProductDetailsActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.product_details);
-        TextView TextViewType = (TextView) findViewById(R.id.view_prod_type);
+        TextView TextViewPret = (TextView) findViewById(R.id.view_prod_pret);
         TextView TextViewDenumire = (TextView) findViewById(R.id.view_prod_name);
-        TextView TextViewLoc = (TextView) findViewById(R.id.view_prod_location);
+        TextView TextViewDescr = (TextView) findViewById(R.id.view_prod_descr);
         Button btnAddToShopList = (Button) findViewById(R.id.btn_addShopList);
 
 
@@ -43,9 +43,9 @@ public class ProductDetailsActivity extends Activity {
         Search(SearchActivity.categorieArrayList,SearchActivity.produsArrayList,type,id);
         Log.d("Android: ", type + id);
         if(produsCurent != null){
-            TextViewType.setText(type);
+            TextViewPret.setText("Pret: " + produsCurent.getPret());
             TextViewDenumire.setText(produsCurent.getDenumire());
-            TextViewLoc.setText(getLocatie(SearchActivity.categorieArrayList));
+            TextViewDescr.setText(produsCurent.getDescriere());
             btnAddToShopList.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
@@ -59,9 +59,9 @@ public class ProductDetailsActivity extends Activity {
             });
 
         }else if(categorieCurenta != null){
-            TextViewType.setText(type);
+            //TextViewPret.setText(type);
             TextViewDenumire.setText(categorieCurenta.getDenumire());
-            TextViewLoc.setText(categorieCurenta.getRaion() + " ... " + categorieCurenta.getRaft());
+            TextViewDescr.setText(categorieCurenta.getDenumire());
             btnAddToShopList.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
