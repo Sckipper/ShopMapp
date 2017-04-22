@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.view.View;
 import android.view.Display;
 import 	android.graphics.Point;
+import android.widget.ImageView;
 
 import static android.R.attr.x;
 import static android.R.attr.y;
@@ -19,6 +20,7 @@ import static android.graphics.Color.rgb;
 
 public class CustomView extends View {
     private Paint paint;
+    private ImageView mImageView;
 
     public CustomView(Context context) {
         super(context);
@@ -32,13 +34,16 @@ public class CustomView extends View {
 
     @Override
     protected void onDraw(Canvas canvas) {
-        int w = canvas.getWidth();
+        /*int w = canvas.getWidth();
         int h = canvas.getHeight();
         int splitWidth = 10;
         int splitHeight = 20;
         canvas.drawRect(new Rect(0, 0, w, h), paint);
         for(int i=1;i<=w;i+= w/splitWidth)
             for(int j=1;j<=h;j+=h/splitHeight)
-                canvas.drawRect(new Rect(i,j, w, h), paint);
+                canvas.drawRect(new Rect(i,j, w, h), paint);*/
+
+        mImageView = (ImageView) findViewById(R.id.imageViewId);
+        mImageView.setImageResource(R.drawable.imageFileId);
     }
 }
