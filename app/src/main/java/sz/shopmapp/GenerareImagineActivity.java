@@ -5,15 +5,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
-public class GenerareImagine extends AppCompatActivity {
+public class GenerareImagineActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-
-        //Log.d("Android: " , imgView.toString());
-        //imgView.setImageResource(R.drawable.magazin);
         setContentView(new CustomView(this));
+
+
+
     }
 }

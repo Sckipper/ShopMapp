@@ -30,6 +30,7 @@ public class CustomView extends View {
         paint.setStyle(Paint.Style.STROKE);
         paint.setColor(Color.parseColor("#444444"));
         paint.setStrokeWidth(3);
+        setBackgroundResource(R.drawable.magazin);
     }
 
     @Override

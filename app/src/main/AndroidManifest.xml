@@ -22,7 +22,7 @@
         </activity>
         <activity android:name=".SearchActivity" />
         <activity android:name=".ProductDetailsActivity" />
-        <activity android:name=".GenerareImagine" />
+        <activity android:name=".GenerareImagineActivity" />
         <activity android:name=".ListaDeCumparaturiActivity"></activity>
     </application>
 
