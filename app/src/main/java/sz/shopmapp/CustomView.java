@@ -42,8 +42,5 @@ public class CustomView extends View {
         for(int i=1;i<=w;i+= w/splitWidth)
             for(int j=1;j<=h;j+=h/splitHeight)
                 canvas.drawRect(new Rect(i,j, w, h), paint);*/
-
-        mImageView = (ImageView) findViewById(R.id.imageViewId);
-        mImageView.setImageResource(R.drawable.imageFileId);
     }
 }

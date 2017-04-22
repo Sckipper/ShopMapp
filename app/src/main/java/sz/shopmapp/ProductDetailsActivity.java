@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,7 +37,7 @@ public class ProductDetailsActivity extends Activity {
         TextView TextViewDenumire = (TextView) findViewById(R.id.view_prod_name);
         TextView TextViewDescr = (TextView) findViewById(R.id.view_prod_descr);
         Button btnAddToShopList = (Button) findViewById(R.id.btn_addShopList);
-
+        ImageView imgView = (ImageView) findViewById(R.id.view_prod_imageView);
 
         String type = getIntent().getExtras().getString("type");
         Integer id = getIntent().getExtras().getInt("id");
@@ -46,6 +47,9 @@ public class ProductDetailsActivity extends Activity {
             TextViewPret.setText("Pret: " + produsCurent.getPret());
             TextViewDenumire.setText(produsCurent.getDenumire());
             TextViewDescr.setText(produsCurent.getDescriere());
+            int resourceImage = getResources().getIdentifier(produsCurent.getImagine(),"drawable",getPackageName());
+            imgView.setImageResource(resourceImage);
+
             btnAddToShopList.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
@@ -62,6 +66,8 @@ public class ProductDetailsActivity extends Activity {
             //TextViewPret.setText(type);
             TextViewDenumire.setText(categorieCurenta.getDenumire());
             TextViewDescr.setText(categorieCurenta.getDenumire());
+            int resourceImage = getResources().getIdentifier(categorieCurenta.getImagine(),"drawable",getPackageName());
+            imgView.setImageResource(resourceImage);
             btnAddToShopList.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
