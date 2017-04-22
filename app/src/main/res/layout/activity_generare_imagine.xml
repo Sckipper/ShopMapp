@@ -7,9 +7,9 @@
     tools:context="sz.shopmapp.GenerareImagine">
 
     <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/magazin_imageView"
+        android:layout_width="384dp"
+        android:layout_height="511dp"
         app:srcCompat="@drawable/magazin"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="0dp" />
