@@ -36,6 +36,7 @@ public class JsonTool {
             for(int i = 0; i < ja.length(); i++) {
                 JSONObject job = ja.getJSONObject(i);
                 int raion,raft,catID;
+                String imag;
                 raion = Integer.parseInt(job.getString("cod").split("-")[0]);
                 try {
                     raft = Integer.parseInt(job.getString("cod").split("-")[1]);
@@ -47,7 +48,12 @@ public class JsonTool {
                 } catch (Exception e){
                     catID = 0;
                 }
-                arlCategorie.add(new Categorie(job.getInt("id"),catID,job.getString("denumire"),raion,raft));
+                try{
+                    imag = job.getString("imagine");
+                } catch (Exception e){
+                    imag = "";
+                }
+                arlCategorie.add(new Categorie(job.getInt("id"),catID,job.getString("denumire"),raion,raft,imag));
             }
         }catch (Exception e){
             Log.d("Android: ",e.toString());
