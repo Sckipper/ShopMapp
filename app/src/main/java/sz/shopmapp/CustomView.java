@@ -3,13 +3,16 @@ package sz.shopmapp;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.view.ScaleGestureDetector;
 import android.view.View;
 import android.view.Display;
 import 	android.graphics.Point;
 import android.widget.ImageView;
 
+import static android.R.attr.state_first;
 import static android.R.attr.x;
 import static android.R.attr.y;
 import static android.graphics.Color.rgb;
@@ -20,7 +23,6 @@ import static android.graphics.Color.rgb;
 
 public class CustomView extends View {
     private Paint paint;
-    private ImageView mImageView;
 
     public CustomView(Context context) {
         super(context);
@@ -31,6 +33,7 @@ public class CustomView extends View {
         paint.setColor(Color.parseColor("#444444"));
         paint.setStrokeWidth(3);
         setBackgroundResource(R.drawable.magazin);
+
     }
 
     @Override
@@ -43,6 +46,6 @@ public class CustomView extends View {
         for(int i=1;i<=w;i+= w/splitWidth)
             for(int j=1;j<=h;j+=h/splitHeight)
                 canvas.drawRect(new Rect(i,j, w, h), paint);*/
-
     }
+
 }
