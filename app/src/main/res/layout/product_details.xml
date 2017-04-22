@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+<LinearLayout
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
@@ -13,28 +15,62 @@
         android:textAlignment="center"
         android:textSize="30sp" />
 
-    <TextView
-        android:id="@+id/view_prod_pret"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="18sp"
-        android:textStyle="bold" />
-
-    <TextView
-        android:id="@+id/view_prod_descr"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-
     <ImageView
         android:id="@+id/view_prod_imageView"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:layout_weight="0.63" />
+        android:layout_weight="0.63"
+        android:adjustViewBounds="true" />
 
-    <Button
-        android:id="@+id/btn_addShopList"
-        android:layout_width="170dp"
+    <TextView
+        android:id="@+id/view_prod_pret"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="0.07"
-        android:text="@string/btn_adauga_in_lista" />
+        android:paddingLeft="30dp"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/view_prod_greutate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/view_prod_cantitate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp" />
+
+    <TextView
+        android:id="@+id/view_prod_descr"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="30dp" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_view_in_magazin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.07"
+            android:text="@string/btn_vezi_in_magazin" />
+
+        <Button
+            android:id="@+id/btn_addShopList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.07"
+            android:text="@string/btn_adauga_in_lista" />
+
+    </LinearLayout>
+
 </LinearLayout>
+    </ScrollView>

@@ -36,20 +36,28 @@ public class ProductDetailsActivity extends Activity {
         TextView TextViewPret = (TextView) findViewById(R.id.view_prod_pret);
         TextView TextViewDenumire = (TextView) findViewById(R.id.view_prod_name);
         TextView TextViewDescr = (TextView) findViewById(R.id.view_prod_descr);
+        TextView TextViewCantitate = (TextView) findViewById(R.id.view_prod_cantitate);
         Button btnAddToShopList = (Button) findViewById(R.id.btn_addShopList);
         ImageView imgView = (ImageView) findViewById(R.id.view_prod_imageView);
+        TextView TextViewGreutate = (TextView) findViewById(R.id.view_prod_greutate);
 
         String type = getIntent().getExtras().getString("type");
         Integer id = getIntent().getExtras().getInt("id");
         Search(SearchActivity.categorieArrayList,SearchActivity.produsArrayList,type,id);
         Log.d("Android: ", type + id);
-        if(produsCurent != null){
-            TextViewPret.setText("Pret: " + produsCurent.getPret());
+        if(produsCurent != null){       //setez toate view-urile cu informatii sau fara
+            TextViewPret.setText("Pret: " + produsCurent.getPret() + " Lei");
             TextViewDenumire.setText(produsCurent.getDenumire());
-            TextViewDescr.setText(produsCurent.getDescriere());
+            TextViewDescr.setText("Descriere: " + produsCurent.getDescriere());
+            TextViewCantitate.setText("Cantitate disponibila: " + String.format("%.0f",produsCurent.getCantitate()) + " buc.");
+
             int resourceImage = getResources().getIdentifier(produsCurent.getImagine(),"drawable",getPackageName());
             imgView.setImageResource(resourceImage);
 
+            if(produsCurent.getGreutate().compareTo("") == 0)
+                TextViewGreutate.setVisibility(View.GONE);
+            else
+                TextViewGreutate.setText("Greutate: " + produsCurent.getGreutate());
             btnAddToShopList.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {
@@ -62,12 +70,20 @@ public class ProductDetailsActivity extends Activity {
                 }
             });
 
-        }else if(categorieCurenta != null){
-            //TextViewPret.setText(type);
+        }else if(categorieCurenta != null){ //setez toate view-urile cu informatii sau fara
+            TextViewPret.setVisibility(View.GONE);
+            TextViewCantitate.setVisibility(View.GONE);
+            TextViewGreutate.setVisibility(View.GONE);
             TextViewDenumire.setText(categorieCurenta.getDenumire());
-            TextViewDescr.setText(categorieCurenta.getDenumire());
+
+            if(categorieCurenta.getDescriere().compareTo("") == 0)
+                TextViewDescr.setVisibility(View.GONE);
+            else
+                TextViewDescr.setText("Descriere: " + categorieCurenta.getDescriere());
+
             int resourceImage = getResources().getIdentifier(categorieCurenta.getImagine(),"drawable",getPackageName());
             imgView.setImageResource(resourceImage);
+
             btnAddToShopList.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View view) {

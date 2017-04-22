@@ -4,4 +4,5 @@
     <string name="btn_lista">Lista de cumparaturi</string>
     <string name="tv_cauta_produs">Denumire produs</string>
     <string name="btn_adauga_in_lista">Adauga in lista de cumparaturi</string>
+    <string name="btn_vezi_in_magazin">Localizeaza in magazin</string>
 </resources>

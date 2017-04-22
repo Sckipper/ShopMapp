@@ -12,14 +12,16 @@ public class Categorie {
     String denumire;
     int raion;int raft;
     String imagine;
+    String descriere;
 
-    public Categorie(int i, int ci, String den, int rai, int raf, String img){
+    public Categorie(int i, int ci, String den, int rai, int raf, String img, String desc){
         id = i;
         categorieID = ci;
         denumire = den;
         raion = rai;
         raft = raf;
         imagine = img;
+        descriere = desc;
     }
 
     public void Show(){
@@ -32,6 +34,7 @@ public class Categorie {
     public int getRaion(){return this.raion;}
     public int getRaft(){return this.raft;}
     public String getImagine(){return this.imagine;}
+    public String getDescriere(){return this.descriere;}
 
     public void setId(int i){this.id  = i;}
     public void setCategorieID(int i){this.categorieID = i;}
@@ -39,5 +42,5 @@ public class Categorie {
     public void setRaion(int r){this.raion = r;}
     public void setRaft(int r){this.raft = r;}
     public void setImagine(String s){this.imagine = s;}
-
+    public void setDescriere(String s){this.descriere = s;}
 }
