@@ -38,6 +38,7 @@ public class ProductDetailsActivity extends Activity {
         TextView TextViewDescr = (TextView) findViewById(R.id.view_prod_descr);
         TextView TextViewCantitate = (TextView) findViewById(R.id.view_prod_cantitate);
         Button btnAddToShopList = (Button) findViewById(R.id.btn_addShopList);
+        Button btnViewInMagazin = (Button) findViewById(R.id.btn_view_in_magazin);
         ImageView imgView = (ImageView) findViewById(R.id.view_prod_imageView);
         TextView TextViewGreutate = (TextView) findViewById(R.id.view_prod_greutate);
 
@@ -96,6 +97,15 @@ public class ProductDetailsActivity extends Activity {
                 }
             });
         }
+        btnViewInMagazin.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                Intent myIntent = new Intent(view.getContext(), GenerareImagineActivity.class);
+                myIntent.putExtra("p",produsCurent);
+                myIntent.putExtra("c",categorieCurenta);
+                startActivityForResult(myIntent, 0);
+            }
+        });
     }
 
     public Toast customToast(String message, String textColor){

@@ -2,11 +2,13 @@ package sz.shopmapp;
 
 import android.util.Log;
 
+import java.io.Serializable;
+
 /**
  * Created by tavi2 on 09.04.2017.
  */
 
-public class Produs {
+public class Produs implements Serializable{
     int id;
     int categorieID;
     String denumire;
