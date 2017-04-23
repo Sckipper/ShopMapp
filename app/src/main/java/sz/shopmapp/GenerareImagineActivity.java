@@ -41,7 +41,9 @@ public class GenerareImagineActivity extends Activity {
                 ZoomableImageView touch = (ZoomableImageView) findViewById(R.id.imageEnhance);
                 touch.setImageBitmap(pi.DesenareProdus(produsCurent));
             } else {  // a selectat categorie
-
+                PrelucrareImagine pi = new PrelucrareImagine(BitmapFactory.decodeResource(getResources(), R.drawable.magazin));
+                ZoomableImageView touch = (ZoomableImageView) findViewById(R.id.imageEnhance);
+                touch.setImageBitmap(pi.DesenareCategorie(categorieCurenta));
             }
         }
     }

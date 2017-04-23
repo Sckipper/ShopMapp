@@ -97,21 +97,23 @@ public class PrelucrareImagine {
 
         int raion = 0;
         int raft = 0;
+        int nrMaxRafturi = 0;
         for (Categorie cat:SearchActivity.categorieArrayList
                 ) {
             if(cat.getId() == p.getCategorieID()) {
                 raion = cat.getRaion();
                 raft = cat.getRaft();
+                nrMaxRafturi = cat.getNrMaxRafturi();
             }
         }
         int index = raion - 1;
-        //partea de impartire a raionului in ....3.... parti TODO generalizare
+        //partea de impartire a raionului in ....3.... parti
         if(rectsOrientation.get(index).compareTo("Horizontal") == 0) {    //raionul e desenat orizontal deci impartirea se face pe verticala
             //c.drawRect(rects.get(index),rectPaint);
             //c.drawText(p.getDenumire(),rects.get(index).centerX() - (rects.get(index).centerX()-rects.get(index).left),rects.get(index).centerY(),textPaint);
             Rect r = rects.get(index);
-            int xdiff = Math.abs(r.right - r.left) / 3;
-            for(int i=0;i<3;i++){
+            int xdiff = Math.abs(r.right - r.left) / nrMaxRafturi;
+            for(int i=0;i<nrMaxRafturi;i++){
                 if(i+1 == raft) {
                     Rect newRect = new Rect(r.left + xdiff * i, r.top, r.left + xdiff * (i + 1), r.bottom);
                     c.drawRect(newRect, rectPaint1);
@@ -123,8 +125,8 @@ public class PrelucrareImagine {
             //c.drawRect(rects.get(index),rectPaint);
 
             Rect r = rects.get(index);
-            int ydiff = Math.abs(r.bottom - r.top) / 3;
-            for(int i=0;i<3;i++){
+            int ydiff = Math.abs(r.bottom - r.top) / nrMaxRafturi;
+            for(int i=0;i<nrMaxRafturi;i++){
                 if(i+1 == raft) {
                     Rect newRect = new Rect(r.left, r.top + ydiff * i, r.right, r.top + ydiff * (i + 1));
                     c.drawRect(newRect, rectPaint1);
@@ -132,12 +134,69 @@ public class PrelucrareImagine {
                 }
             }
         }
-
-
         return bm;
     }
 
-    public void DesenareCategorie(Categorie c){
+    public Bitmap DesenareCategorie(Categorie cat){
+        Bitmap bm = initialImage.copy(Bitmap.Config.ARGB_8888, true);    //prelucrare pe bm si returnare imagine pentru afisat
+        Canvas c = new Canvas(bm);
 
+        Paint rectPaint = new Paint();
+        rectPaint.setAntiAlias(true);
+        rectPaint.setStrokeWidth(6F);
+        rectPaint.setColor(Color.BLUE);
+        rectPaint.setStyle(Paint.Style.STROKE);
+
+        Paint rectPaint1 = new Paint();
+        rectPaint1.setAntiAlias(true);
+        rectPaint1.setStrokeWidth(6F);
+        rectPaint1.setColor(Color.RED);
+        rectPaint1.setStyle(Paint.Style.STROKE);
+
+        Paint textPaint = new Paint();
+        textPaint.setColor(Color.WHITE);
+        textPaint.setStyle(Paint.Style.FILL);
+        textPaint.setColor(Color.BLACK);
+        textPaint.setTextSize(15);
+
+        if(cat.getCategorieID() == 0){  //e tot raionul
+            int index = cat.getRaion() - 1;
+            c.drawRect(rects.get(index),rectPaint1);
+            c.drawText(cat.getDenumire(),rects.get(index).centerX() - (rects.get(index).centerX()-rects.get(index).left),rects.get(index).centerY(),textPaint);
+        } else {
+            int raion = cat.getRaion();
+            int raft = cat.getRaft();
+            int nrMaxRafturi = cat.getNrMaxRafturi();
+
+            int index = raion - 1;
+            //partea de impartire a raionului in ....3.... parti
+            if (rectsOrientation.get(index).compareTo("Horizontal") == 0) {    //raionul e desenat orizontal deci impartirea se face pe verticala
+                //c.drawRect(rects.get(index),rectPaint);
+                //c.drawText(p.getDenumire(),rects.get(index).centerX() - (rects.get(index).centerX()-rects.get(index).left),rects.get(index).centerY(),textPaint);
+                Rect r = rects.get(index);
+                int xdiff = Math.abs(r.right - r.left) / nrMaxRafturi;
+                for (int i = 0; i < nrMaxRafturi; i++) {
+                    if (i + 1 == raft) {
+                        Rect newRect = new Rect(r.left + xdiff * i, r.top, r.left + xdiff * (i + 1), r.bottom);
+                        c.drawRect(newRect, rectPaint1);
+                        c.drawText(cat.getDenumire(), newRect.centerX() - (newRect.centerX() - newRect.left), newRect.centerY(), textPaint);
+                    }
+                }
+
+            } else if (rectsOrientation.get(index).compareTo("Vertical") == 0) {    //raionul e desenat vertical deci impartirea se face pe orizontala
+                //c.drawRect(rects.get(index),rectPaint);
+
+                Rect r = rects.get(index);
+                int ydiff = Math.abs(r.bottom - r.top) / nrMaxRafturi;
+                for (int i = 0; i < nrMaxRafturi; i++) {
+                    if (i + 1 == raft) {
+                        Rect newRect = new Rect(r.left, r.top + ydiff * i, r.right, r.top + ydiff * (i + 1));
+                        c.drawRect(newRect, rectPaint1);
+                        c.drawText(cat.getDenumire(), newRect.centerX() - (newRect.centerX() - newRect.left), newRect.centerY(), textPaint);
+                    }
+                }
+            }
+        }
+        return bm;
     }
 }

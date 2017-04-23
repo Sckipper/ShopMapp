@@ -35,13 +35,18 @@ public class JsonTool {
             JSONArray ja = object.getJSONArray("items");
             for(int i = 0; i < ja.length(); i++) {
                 JSONObject job = ja.getJSONObject(i);
-                int raion,raft,catID;
+                int raion,raft,catID,nrMax;
                 String imag,descriere;
                 raion = Integer.parseInt(job.getString("cod").split("-")[0]);
                 try {
                     raft = Integer.parseInt(job.getString("cod").split("-")[1]);
                 }catch (Exception e){
                     raft = 0;
+                }
+                try {
+                    nrMax = Integer.parseInt(job.getString("cod").split("-")[2]);
+                }catch (Exception e){
+                    nrMax = 1;
                 }
                 try{
                     catID = job.getInt("categorieid");
@@ -58,7 +63,7 @@ public class JsonTool {
                 } catch (Exception e){
                     descriere = "";
                 }
-                arlCategorie.add(new Categorie(job.getInt("id"),catID,job.getString("denumire"),raion,raft,imag,descriere));
+                arlCategorie.add(new Categorie(job.getInt("id"),catID,job.getString("denumire"),raion,raft,nrMax,imag,descriere));
             }
         }catch (Exception e){
             Log.d("Android: ",e.toString());
