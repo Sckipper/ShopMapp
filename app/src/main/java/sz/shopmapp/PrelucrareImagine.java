@@ -93,7 +93,7 @@ public class PrelucrareImagine {
         textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(20);
+        textPaint.setTextSize(15);
 
         int raion = 0;
         int raft = 0;
