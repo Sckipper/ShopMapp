@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.widget.ImageView;
 
 
 public class GenerareImagineActivity extends Activity {
@@ -14,6 +15,7 @@ public class GenerareImagineActivity extends Activity {
 
         PrelucrareImagine pi = new PrelucrareImagine(BitmapFactory.decodeResource(getResources(), R.drawable.magazin));
         ZoomableImageView touch = (ZoomableImageView) findViewById(R.id.imageEnhance);
+        pi.GenerareRect();
         touch.setImageBitmap(pi.Prelucrare());
     }
 }
