@@ -34,7 +34,7 @@ public class GenerareImagineActivity extends Activity {
         if(produsCurent == null && categorieCurenta == null) {  //afisez harta cu produsele din lista
             PrelucrareImagine pi = new PrelucrareImagine(BitmapFactory.decodeResource(getResources(), R.drawable.magazin));
             ZoomableImageView touch = (ZoomableImageView) findViewById(R.id.imageEnhance);
-            touch.setImageBitmap(pi.Prelucrare());
+            touch.setImageBitmap(pi.GenerareDinListaDeCumparaturi());
         } else{     // a selectat un produs sau categorie si i-l arat pe harta
             if(categorieCurenta == null) {  // a selectat produs
                 PrelucrareImagine pi = new PrelucrareImagine(BitmapFactory.decodeResource(getResources(), R.drawable.magazin));
