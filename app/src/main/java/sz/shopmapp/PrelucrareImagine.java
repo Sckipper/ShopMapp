@@ -38,15 +38,27 @@ public class PrelucrareImagine {
         rectPaint.setColor(Color.BLUE);
         rectPaint.setStyle(Paint.Style.STROKE);
 
+        Paint circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
+        circlePaint.setStrokeWidth(6F);
+        circlePaint.setColor(Color.GREEN);
+        circlePaint.setStyle(Paint.Style.FILL);
+
         Paint textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(20);
-
+        // desenare traseu verde
+        AStarPathFinder.Cell puncteVerzi = AStarPathFinder.getPath(101, 101, 23, 7, 17, 84,AStarPathFinder.block);
+        while(puncteVerzi.parent!=null) {
+            c.drawCircle(puncteVerzi.i*10,puncteVerzi.j*10, 4,circlePaint);
+            puncteVerzi = puncteVerzi.parent;
+        }
         for (Rect r: rects          //ramane de selectate ce raioane sa se deseneze in functie de ce e in lista
              ) {
             c.drawRect(r,rectPaint);
+
             c.drawText("Denumire Raion",r.centerX() - (r.centerX()-r.left),r.centerY(),textPaint);
         }
         return bm;
