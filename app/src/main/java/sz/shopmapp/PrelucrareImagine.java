@@ -8,7 +8,10 @@ import android.graphics.Rect;
 import android.util.DebugUtils;
 import android.util.Log;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 
 /**
  * Created by tavi2 on 22-04-2017.
@@ -205,76 +208,71 @@ public class PrelucrareImagine {
         return bm;
     }
 
-    public Bitmap GenerareDinListaDeCumparaturi(){
+    public Bitmap GenerareDinListaDeCumparaturi() {
         Bitmap bm = initialImage.copy(Bitmap.Config.ARGB_8888, true);    //prelucrare pe bm si returnare imagine pentru afisat
         Canvas c = new Canvas(bm);
-        ArrayList<Produs> listaProduse = new ArrayList<>(ListaDeCumparaturi.listaProduse);
-        ArrayList<Categorie> listaCategorii = new ArrayList<>(ListaDeCumparaturi.listaCategorii);
-
-
-        Paint circlePaint = new Paint();
-        circlePaint.setAntiAlias(true);
-        circlePaint.setStrokeWidth(6F);
-        circlePaint.setColor(Color.GREEN);
-        circlePaint.setStyle(Paint.Style.FILL);
-
-        AStarPathFinder.Cell puncteVerzi = AStarPathFinder.getPath(101, 101, 4, 8, 28, 78,AStarPathFinder.block);
-        while(puncteVerzi.parent!=null) {
-            c.drawCircle(puncteVerzi.i*10,puncteVerzi.j*10, 4,circlePaint);
-            puncteVerzi = puncteVerzi.parent;
-        }
-
-
-
-        for (Categorie cat: listaCategorii
-             ) {
-            if(cat.getCategorieID() != 0){
-                bm = GenereazaCategorii(bm,cat,0);
-                int count = 0;
-                for(int i=0;i<listaProduse.size();i++){
-                    Log.d("Android:","amasfn");
-                    if(listaProduse.get(i).getCategorieID() == cat.getId()){
-                        count++;
-                        bm = GenereazaProduse(bm,listaProduse.get(i),count,false);
-                        listaProduse.remove(i);
-                        i--;
-                    }
-                }
-            } else
-                bm = GenereazaCategorii(bm,cat,0);
-        }
-        for(int i=0 ;i<listaProduse.size();i++){
-            int count = 0;
-            bm = GenereazaProduse(bm,listaProduse.get(i),count,true);
-            for(int j=i+1;j<listaProduse.size();j++){
-                if(listaProduse.get(i).getCategorieID() == listaProduse.get(j).getCategorieID()){
-                    count++;
-                    bm = GenereazaProduse(bm,listaProduse.get(j),count,false);
-                    listaProduse.remove(j);
-                    j--;
-                }
-            }
-            listaProduse.remove(i);
-        }
+        bm = ImpartirePentruDesenat(bm);
 
         return bm;
     }
 
-    private Bitmap GenereazaCategorii(Bitmap bmpInitial,Categorie cat, int count){
-        Bitmap bm = bmpInitial.copy(Bitmap.Config.ARGB_8888, true);    //prelucrare pe bm si returnare imagine pentru afisat
+    public Bitmap ImpartirePentruDesenat(Bitmap bm){
+        ArrayList<Produs> listaProduse = new ArrayList<>(ListaDeCumparaturi.listaProduse);
+        ArrayList<Categorie> listaCategorii = new ArrayList<>(ListaDeCumparaturi.listaCategorii);
+
+        ArrayList<CategoriiProdusePeRafturi> cppr = new ArrayList<>();
+        Iterator<Categorie> i = listaCategorii.iterator();
+        while(i.hasNext()){
+            Categorie c = i.next();
+            if(c.getCategorieID() == 0){
+                bm = DesenareCategorie(c);
+            } else {
+                int gasit = 0;
+                for (CategoriiProdusePeRafturi cpr : cppr
+                        ) {
+                    if (c.getRaion() == cpr.raion && c.getRaft() == cpr.raft) {       //adaug categoria pe acelasi raft cu alta categorie daca exista
+                        cpr.addCat(c);
+                        gasit = 1;
+                        i.remove();
+                    }
+                }
+                if (gasit == 0) {
+                    cppr.add(new CategoriiProdusePeRafturi(c.getRaion(), c.getRaft(), c));
+                    i.remove();
+                }
+            }
+        }
+        Iterator<Produs> j = listaProduse.iterator();
+        while(j.hasNext()){
+            Produs p = j.next();
+            HashMap hm = RaionRaftProdus(p);
+            int gasit = 0;
+            for (CategoriiProdusePeRafturi cpr: cppr
+                 ) {
+                if(cpr.raft == (int)hm.get("raft") && cpr.raion == (int)hm.get("raion")){
+                    gasit = 1;
+                    cpr.addProdus(p);
+                    j.remove();
+                }
+            }
+            if(gasit == 0){     //nu exista categorie in lista de cumparaturi dar a adaugat un produs din acea categorie
+                cppr.add(new CategoriiProdusePeRafturi((int)hm.get("raion"),(int)hm.get("raft"),p,(int)hm.get("maxraft")));
+                j.remove();
+            }
+        }
+
+        return DeseneazaListaDeCumparaturi(cppr,bm);
+    }
+
+    public Bitmap DeseneazaListaDeCumparaturi(ArrayList<CategoriiProdusePeRafturi> cppr,Bitmap bmp){
+        Bitmap bm = bmp.copy(Bitmap.Config.ARGB_8888, true);    //prelucrare pe bm si returnare imagine pentru afisat
         Canvas c = new Canvas(bm);
 
         Paint rectPaint = new Paint();
         rectPaint.setAntiAlias(true);
         rectPaint.setStrokeWidth(6F);
-        rectPaint.setColor(Color.BLUE);
+        rectPaint.setColor(Color.RED);
         rectPaint.setStyle(Paint.Style.STROKE);
-
-        Paint rectPaint1 = new Paint();
-        rectPaint1.setAntiAlias(true);
-        rectPaint1.setStrokeWidth(6F);
-        rectPaint1.setColor(Color.RED);
-        rectPaint1.setStyle(Paint.Style.STROKE);
 
         Paint textPaint = new Paint();
         textPaint.setColor(Color.WHITE);
@@ -282,16 +280,14 @@ public class PrelucrareImagine {
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(15);
 
-        if(cat.getCategorieID() == 0){  //e tot raionul
-            int index = cat.getRaion() - 1;
-            c.drawRect(rects.get(index),rectPaint1);
-            c.drawText(cat.getDenumire(),rects.get(index).centerX() - (rects.get(index).centerX()-rects.get(index).left),rects.get(index).centerY(),textPaint);
-        } else {
-            int raion = cat.getRaion();
-            int raft = cat.getRaft();
-            int nrMaxRafturi = cat.getNrMaxRafturi();
-
+        for (CategoriiProdusePeRafturi cpr:cppr
+             ) {
+            int raion = cpr.raion;
+            int nrMaxRafturi = cpr.nrMaxRafturi;
             int index = raion - 1;
+            ArrayList<String> denumiri = cpr.getStringList();
+
+
             //partea de impartire a raionului in ....3.... parti
             if (rectsOrientation.get(index).compareTo("Horizontal") == 0) {    //raionul e desenat orizontal deci impartirea se face pe verticala
                 //c.drawRect(rects.get(index),rectPaint);
@@ -299,10 +295,15 @@ public class PrelucrareImagine {
                 Rect r = rects.get(index);
                 int xdiff = Math.abs(r.right - r.left) / nrMaxRafturi;
                 for (int i = 0; i < nrMaxRafturi; i++) {
-                    if (i + 1 == raft) {
+                    if (i + 1 == cpr.raft) {
                         Rect newRect = new Rect(r.left + xdiff * i, r.top, r.left + xdiff * (i + 1), r.bottom);
-                        c.drawRect(newRect, rectPaint1);
-                        c.drawText(cat.getDenumire(), 6+newRect.centerX() - (newRect.centerX() - newRect.left), newRect.centerY() + count*10, textPaint);
+                        c.drawRect(newRect, rectPaint);
+                        int count = 1;
+                        for (String s:denumiri
+                             ) {
+                            c.drawText(s, newRect.left,newRect.top + count*12, textPaint);
+                            count++;
+                        }
                     }
                 }
 
@@ -312,81 +313,93 @@ public class PrelucrareImagine {
                 Rect r = rects.get(index);
                 int ydiff = Math.abs(r.bottom - r.top) / nrMaxRafturi;
                 for (int i = 0; i < nrMaxRafturi; i++) {
-                    if (i + 1 == raft) {
+                    if (i + 1 == cpr.raft) {
                         Rect newRect = new Rect(r.left, r.top + ydiff * i, r.right, r.top + ydiff * (i + 1));
-                        c.drawRect(newRect, rectPaint1);
-                        c.drawText(cat.getDenumire(), 6+newRect.centerX() - (newRect.centerX() - newRect.left), newRect.centerY() + count*10, textPaint);
+                        c.drawRect(newRect, rectPaint);
+                        int count = 2;
+                        for (String s:denumiri
+                                ) {
+                            c.drawText(s, newRect.left,newRect.top + count*12, textPaint);
+                            count++;
+                        }
                     }
                 }
             }
         }
-
         return bm;
     }
 
-    private Bitmap GenereazaProduse(Bitmap bmpInitial,Produs prod, int count, boolean paintBorder){
-        Bitmap bm = bmpInitial.copy(Bitmap.Config.ARGB_8888, true);    //prelucrare pe bm si returnare imagine pentru afisat
-        Canvas c = new Canvas(bm);
+    private class CategoriiProdusePeRafturi{
+        public ArrayList<Categorie> listaCat;
+        public ArrayList<Produs> listaProd;
+        public int raion;
+        public int raft;
+        public int nrMaxRafturi;
 
-        Paint rectPaint = new Paint();
-        rectPaint.setAntiAlias(true);
-        rectPaint.setStrokeWidth(6F);
-        rectPaint.setColor(Color.BLUE);
-        rectPaint.setStyle(Paint.Style.STROKE);
+        public CategoriiProdusePeRafturi(int rai,int raf,Categorie categ){
+            listaCat = new ArrayList<>();
+            listaProd = new ArrayList<>();
+            listaCat.add(categ);
+            raion = rai;
+            raft = raf;
+            nrMaxRafturi = categ.getNrMaxRafturi();
+        }
 
-        Paint rectPaint1 = new Paint();
-        rectPaint1.setAntiAlias(true);
-        rectPaint1.setStrokeWidth(6F);
-        rectPaint1.setColor(Color.RED);
-        rectPaint1.setStyle(Paint.Style.STROKE);
+        public CategoriiProdusePeRafturi(int rai,int raf,Produs pr, int nrm){
+            listaCat = new ArrayList<>();
+            listaProd = new ArrayList<>();
+            listaProd.add(pr);
+            raion = rai;
+            raft = raf;
+            nrMaxRafturi = nrm;
+        }
 
-        Paint textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
-        textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setColor(Color.BLACK);
-        textPaint.setTextSize(15);
+        public void addProdus(Produs p){
+            listaProd.add(p);
+        }
 
-        int raion = 0;
-        int raft = 0;
-        int nrMaxRafturi = 0;
-        for (Categorie cat:SearchActivity.categorieArrayList
-                ) {
-            if(cat.getId() == prod.getCategorieID()) {
-                raion = cat.getRaion();
-                raft = cat.getRaft();
-                nrMaxRafturi = cat.getNrMaxRafturi();
+        public void addCat(Categorie c){
+            listaCat.add(c);
+        }
+
+        public void Show(){
+            Log.d("Android: ", "raion:" + raion + " raft:" + raft);
+            for (Categorie c:listaCat
+                 ) {
+                Log.d("Android: ",c.getDenumire());
+            }
+            for (Produs p: listaProd
+                 ) {
+                Log.d("Android: ",p.getDenumire());
             }
         }
-        int index = raion - 1;
-        //partea de impartire a raionului in ....3.... parti
-        if(rectsOrientation.get(index).compareTo("Horizontal") == 0) {    //raionul e desenat orizontal deci impartirea se face pe verticala
-            //c.drawRect(rects.get(index),rectPaint);
-            //c.drawText(p.getDenumire(),rects.get(index).centerX() - (rects.get(index).centerX()-rects.get(index).left),rects.get(index).centerY(),textPaint);
-            Rect r = rects.get(index);
-            int xdiff = Math.abs(r.right - r.left) / nrMaxRafturi;
-            for(int i=0;i<nrMaxRafturi;i++){
-                if(i+1 == raft) {
-                    Rect newRect = new Rect(r.left + xdiff * i, r.top, r.left + xdiff * (i + 1), r.bottom);
-                    if(paintBorder == true)
-                        c.drawRect(newRect, rectPaint1);
-                    c.drawText(prod.getDenumire(),6+newRect.centerX() - (newRect.centerX()-newRect.left),newRect.centerY() + count * 20,textPaint);
-                }
-            }
 
-        } else if(rectsOrientation.get(index).compareTo("Vertical") == 0){    //raionul e desenat vertical deci impartirea se face pe orizontala
-            //c.drawRect(rects.get(index),rectPaint);
-
-            Rect r = rects.get(index);
-            int ydiff = Math.abs(r.bottom - r.top) / nrMaxRafturi;
-            for(int i=0;i<nrMaxRafturi;i++){
-                if(i+1 == raft) {
-                    Rect newRect = new Rect(r.left, r.top + ydiff * i, r.right, r.top + ydiff * (i + 1));
-                    if(paintBorder == true)
-                        c.drawRect(newRect, rectPaint1);
-                    c.drawText(prod.getDenumire(),6+newRect.centerX() - (newRect.centerX()-newRect.left),newRect.centerY() + count * 20,textPaint);
-                }
+        public ArrayList<String> getStringList(){
+            ArrayList<String> arls = new ArrayList<>();
+            for (Categorie c:listaCat
+                 ) {
+                arls.add(c.getDenumire());
             }
+            for (Produs p:listaProd
+                 ) {
+                arls.add(p.getDenumire());
+            }
+            return arls;
         }
-        return bm;
+
     }
+
+    public HashMap<String,Integer> RaionRaftProdus(Produs p){
+        HashMap<String,Integer> map = new HashMap<>();
+        for (Categorie c:SearchActivity.categorieArrayList
+             ) {
+            if(p.getCategorieID() == c.getId()){
+                map.put("raion",c.getRaion());
+                map.put("raft",c.getRaft());
+                map.put("maxraft",c.getNrMaxRafturi());
+            }
+        }
+        return map;
+    }
+
 }
