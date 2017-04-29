@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">ShopMApp</string>
+    <string name="app_name">ShopMapp</string>
     <string name="btn_cauta">Cauta produs</string>
     <string name="btn_lista">Lista de cumparaturi</string>
     <string name="tv_cauta_produs">Denumire produs</string>
