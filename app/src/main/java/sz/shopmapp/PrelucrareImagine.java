@@ -4,12 +4,15 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.util.DebugUtils;
 import android.util.Log;
 
 import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -22,11 +25,16 @@ public class PrelucrareImagine {
 
     private ArrayList<Rect> rects;
     private ArrayList<String> rectsOrientation;
+    private ArrayList<String> raionAcces;
+
+    private ArrayList<Point> puncte;
 
     public PrelucrareImagine(Bitmap b){
         this.initialImage = b;
         rects = new ArrayList<>();
         rectsOrientation = new ArrayList<>();
+        raionAcces = new ArrayList<>();
+        puncte = new ArrayList<>();
         GenerareRect();
     }
 
@@ -48,8 +56,7 @@ public class PrelucrareImagine {
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(20);
-        // desenare traseu verde
-        //AStarPathFinder.Cell puncteVerzi = AStarPathFinder.getPath(101, 101, 23, 7, 17, 84,AStarPathFinder.block);
+
 
         for (Rect r: rects          //ramane de selectate ce raioane sa se deseneze in functie de ce e in lista
              ) {
@@ -64,21 +71,28 @@ public class PrelucrareImagine {
         //Raion 1
         rects.add(new Rect(54,124,123,437));
         rectsOrientation.add("Vertical");
+        raionAcces.add("dreapta");
         //Raion 2
         rects.add(new Rect(337,195,406,588));
         rectsOrientation.add("Vertical");
+        raionAcces.add("stanga");
         //Raion 3,4,5 puse sa fie
         rects.add(new Rect()); rects.add(new Rect()); rects.add(new Rect());rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");
+        raionAcces.add("stanga");raionAcces.add("stanga");raionAcces.add("stanga");
         //Raion 6
         rects.add(new Rect(122,858,747,927));
         rectsOrientation.add("Horizontal");
+        raionAcces.add("sus");
         //Raion 7,8,9 puse sa fie
         rects.add(new Rect()); rects.add(new Rect()); rects.add(new Rect());rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");
+        raionAcces.add("stanga");raionAcces.add("stanga");raionAcces.add("stanga");
         //Raion 10
         rects.add(new Rect(512,187,580,573));
         rectsOrientation.add("Vertical");
+        raionAcces.add("dreapta");
         //Raion 11,12 la fel
         rects.add(new Rect()); rects.add(new Rect());rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");
+        raionAcces.add("stanga");raionAcces.add("stanga");
     }
 
     public Bitmap DesenareProdus(Produs p){
@@ -87,13 +101,13 @@ public class PrelucrareImagine {
 
         Paint rectPaint = new Paint();
         rectPaint.setAntiAlias(true);
-        rectPaint.setStrokeWidth(6F);
+        rectPaint.setStrokeWidth(3F);
         rectPaint.setColor(Color.BLUE);
         rectPaint.setStyle(Paint.Style.STROKE);
 
         Paint rectPaint1 = new Paint();
         rectPaint1.setAntiAlias(true);
-        rectPaint1.setStrokeWidth(6F);
+        rectPaint1.setStrokeWidth(3F);
         rectPaint1.setColor(Color.RED);
         rectPaint1.setStyle(Paint.Style.STROKE);
 
@@ -151,7 +165,7 @@ public class PrelucrareImagine {
 
         Paint rectPaint = new Paint();
         rectPaint.setAntiAlias(true);
-        rectPaint.setStrokeWidth(6F);
+        rectPaint.setStrokeWidth(3F);
         rectPaint.setColor(Color.BLUE);
         rectPaint.setStyle(Paint.Style.STROKE);
 
@@ -210,8 +224,29 @@ public class PrelucrareImagine {
 
     public Bitmap GenerareDinListaDeCumparaturi() {
         Bitmap bm = initialImage.copy(Bitmap.Config.ARGB_8888, true);    //prelucrare pe bm si returnare imagine pentru afisat
-        Canvas c = new Canvas(bm);
+
         bm = ImpartirePentruDesenat(bm);
+        Canvas c = new Canvas(bm);
+        Log.d("Android: ",bm.getWidth() + " x " + bm.getHeight() + "");
+
+        Paint circlePaint = new Paint();
+        circlePaint.setAntiAlias(true);
+        circlePaint.setColor(Color.GREEN);
+        circlePaint.setStyle(Paint.Style.FILL);
+        // desenare traseu verde
+        Point start = new Point(23,85);
+        Point fin = new Point(740,830);
+        for (Point p : puncte
+             ) {
+            AStarPathFinder.Cell puncteVerzi = AStarPathFinder.getPath(101, 101, start.x/10, start.y/10, p.x/10, p.y/10);
+
+            while(puncteVerzi!=null) {
+                c.drawCircle(puncteVerzi.i*10,puncteVerzi.j*10, 5,circlePaint);
+                puncteVerzi = puncteVerzi.parent;
+            }
+            start = p;
+        }
+
 
         return bm;
     }
@@ -225,7 +260,9 @@ public class PrelucrareImagine {
         while(i.hasNext()){
             Categorie c = i.next();
             if(c.getCategorieID() == 0){
-                bm = DesenareCategorie(c);
+                //bm = DesenareCategorie(c);
+                cppr.add(new CategoriiProdusePeRafturi(c.getRaion(),c.getRaft(),c));
+                i.remove();
             } else {
                 int gasit = 0;
                 for (CategoriiProdusePeRafturi cpr : cppr
@@ -270,7 +307,7 @@ public class PrelucrareImagine {
 
         Paint rectPaint = new Paint();
         rectPaint.setAntiAlias(true);
-        rectPaint.setStrokeWidth(6F);
+        rectPaint.setStrokeWidth(3F);
         rectPaint.setColor(Color.RED);
         rectPaint.setStyle(Paint.Style.STROKE);
 
@@ -280,47 +317,97 @@ public class PrelucrareImagine {
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(15);
 
+
+        Paint testPaint = new Paint();
+        testPaint.setColor(Color.GREEN);
+        testPaint.setStrokeWidth(6F);
+        testPaint.setStyle(Paint.Style.FILL);
+        testPaint.setColor(Color.BLACK);
+        testPaint.setTextSize(15);
+        Collections.sort(cppr, new Comparator<CategoriiProdusePeRafturi>() {
+            @Override
+            public int compare(CategoriiProdusePeRafturi o1, CategoriiProdusePeRafturi o2) {
+                return o1.raion - o2.raion;
+            }
+        });
+
         for (CategoriiProdusePeRafturi cpr:cppr
              ) {
-            int raion = cpr.raion;
-            int nrMaxRafturi = cpr.nrMaxRafturi;
-            int index = raion - 1;
-            ArrayList<String> denumiri = cpr.getStringList();
-
-
-            //partea de impartire a raionului in ....3.... parti
-            if (rectsOrientation.get(index).compareTo("Horizontal") == 0) {    //raionul e desenat orizontal deci impartirea se face pe verticala
-                //c.drawRect(rects.get(index),rectPaint);
-                //c.drawText(p.getDenumire(),rects.get(index).centerX() - (rects.get(index).centerX()-rects.get(index).left),rects.get(index).centerY(),textPaint);
+            if (cpr.raft == 0) {
+                int index = cpr.raion - 1;
+                c.drawRect(rects.get(index),rectPaint);
+                c.drawText(cpr.getStringList().get(0),rects.get(index).centerX() - (rects.get(index).centerX()-rects.get(index).left),rects.get(index).centerY(),textPaint);
                 Rect r = rects.get(index);
-                int xdiff = Math.abs(r.right - r.left) / nrMaxRafturi;
-                for (int i = 0; i < nrMaxRafturi; i++) {
-                    if (i + 1 == cpr.raft) {
-                        Rect newRect = new Rect(r.left + xdiff * i, r.top, r.left + xdiff * (i + 1), r.bottom);
-                        c.drawRect(newRect, rectPaint);
-                        int count = 1;
-                        for (String s:denumiri
-                             ) {
-                            c.drawText(s, newRect.left,newRect.top + count*12, textPaint);
-                            count++;
+                if (raionAcces.get(index).compareTo("sus") == 0) {
+                    //c.drawCircle(newRect.centerX(),newRect.top,20,testPaint);
+                    puncte.add(new Point(r.centerX(), r.top - 10));
+                } else if (raionAcces.get(index).compareTo("jos") == 0) {
+                    //c.drawCircle(newRect.centerX(),newRect.top,20,testPaint);
+                    puncte.add(new Point(r.centerX(), r.bottom + 10));
+                } else if (raionAcces.get(index).compareTo("dreapta") == 0) {
+                    //c.drawCircle(newRect.right,newRect.centerY(),20,testPaint);
+                    puncte.add(new Point(r.right + 10, r.centerY()));
+                } else if (raionAcces.get(index).compareTo("stanga") == 0) {
+                    c.drawCircle(r.left, r.centerY(), 20, testPaint);
+                    puncte.add(new Point(r.left - 10, r.centerY()));
+                }
+            } else {
+                int raion = cpr.raion;
+                int nrMaxRafturi = cpr.nrMaxRafturi;
+                int index = raion - 1;
+                ArrayList<String> denumiri = cpr.getStringList();
+
+
+                //partea de impartire a raionului in ....3.... parti
+                if (rectsOrientation.get(index).compareTo("Horizontal") == 0) {    //raionul e desenat orizontal deci impartirea se face pe verticala
+                    //c.drawRect(rects.get(index),rectPaint);
+                    //c.drawText(p.getDenumire(),rects.get(index).centerX() - (rects.get(index).centerX()-rects.get(index).left),rects.get(index).centerY(),textPaint);
+                    Rect r = rects.get(index);
+                    int xdiff = Math.abs(r.right - r.left) / nrMaxRafturi;
+                    for (int i = 0; i < nrMaxRafturi; i++) {
+                        if (i + 1 == cpr.raft) {
+                            Rect newRect = new Rect(r.left + xdiff * i, r.top, r.left + xdiff * (i + 1), r.bottom);
+
+                            c.drawRect(newRect, rectPaint);
+                            int count = 1;
+                            for (String s : denumiri
+                                    ) {
+                                //c.drawRect(newRect.left, newRect.top + count * 12, newRect.right, newRect/top);
+                                c.drawText(s, newRect.left, newRect.top + count * 12, textPaint);
+                                count++;
+                            }
+                            if (raionAcces.get(index).compareTo("sus") == 0) {
+                                //c.drawCircle(newRect.centerX(),newRect.top,20,testPaint);
+                                puncte.add(new Point(newRect.centerX(), newRect.top - 10));
+                            } else if (raionAcces.get(index).compareTo("jos") == 0) {
+                                //c.drawCircle(newRect.centerX(),newRect.top,20,testPaint);
+                                puncte.add(new Point(newRect.centerX(), newRect.bottom + 10));
+                            }
                         }
                     }
-                }
 
-            } else if (rectsOrientation.get(index).compareTo("Vertical") == 0) {    //raionul e desenat vertical deci impartirea se face pe orizontala
-                //c.drawRect(rects.get(index),rectPaint);
+                } else if (rectsOrientation.get(index).compareTo("Vertical") == 0) {    //raionul e desenat vertical deci impartirea se face pe orizontala
+                    //c.drawRect(rects.get(index),rectPaint);
 
-                Rect r = rects.get(index);
-                int ydiff = Math.abs(r.bottom - r.top) / nrMaxRafturi;
-                for (int i = 0; i < nrMaxRafturi; i++) {
-                    if (i + 1 == cpr.raft) {
-                        Rect newRect = new Rect(r.left, r.top + ydiff * i, r.right, r.top + ydiff * (i + 1));
-                        c.drawRect(newRect, rectPaint);
-                        int count = 2;
-                        for (String s:denumiri
-                                ) {
-                            c.drawText(s, newRect.left,newRect.top + count*12, textPaint);
-                            count++;
+                    Rect r = rects.get(index);
+                    int ydiff = Math.abs(r.bottom - r.top) / nrMaxRafturi;
+                    for (int i = 0; i < nrMaxRafturi; i++) {
+                        if (i + 1 == cpr.raft) {
+                            Rect newRect = new Rect(r.left, r.top + ydiff * i, r.right, r.top + ydiff * (i + 1));
+                            c.drawRect(newRect, rectPaint);
+                            int count = 2;
+                            for (String s : denumiri
+                                    ) {
+                                c.drawText(s, newRect.left, newRect.top + count * 12, textPaint);
+                                count++;
+                            }
+                            if (raionAcces.get(index).compareTo("dreapta") == 0) {
+                                //c.drawCircle(newRect.right,newRect.centerY(),20,testPaint);
+                                puncte.add(new Point(newRect.right + 10, newRect.centerY()));
+                            } else if (raionAcces.get(index).compareTo("stanga") == 0) {
+                                c.drawCircle(newRect.left, newRect.centerY(), 20, testPaint);
+                                puncte.add(new Point(newRect.left - 10, newRect.centerY()));
+                            }
                         }
                     }
                 }

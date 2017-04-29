@@ -12,7 +12,7 @@ import java.util.PriorityQueue;
  */
 public class AStarPathFinder {
 
-    public static int[][] block = new int[1000][2];
+    public static int[][] blocked ;
 
     public static void initializeBlocked() {
         ArrayList<Integer> colider = new ArrayList<>();
@@ -34,22 +34,69 @@ public class AStarPathFinder {
             colider.add(i);
         }
 
+        for(int i=0; i<=17;i++) {//raioane centru
+            colider.add(42);
+            colider.add(i);
+        }
+        for(int i=33; i<=42;i++) {//raioane centru
+            colider.add(i);
+            colider.add(17);
+        }
+        for(int i=17; i<=59;i++) {//raioane centru
+            colider.add(33);
+            colider.add(i);
+        }
+
+        for(int i=33; i<=58;i++) {//raioane centru
+            colider.add(i);
+            colider.add(59);
+        }
+
+        for(int i=21; i<=59;i++) {//raioane centru
+            colider.add(58);
+            colider.add(i);
+        }
+
+        for(int i=58; i<=64;i++) {//raioane centru
+            colider.add(i);
+            colider.add(21);
+        }
+
+        for(int i=0; i<=21;i++) {//raioane centru
+            colider.add(64);
+            colider.add(i);
+        }
+
         for (int i = 24; i <= 43; i++) { // frigider stanga
             colider.add(i);
             colider.add(65);
             colider.add(i);
             colider.add(76);
         }
-        for (int i = 66; i <= 76; i++) {
+        for (int i = 66; i <= 76; i++) { // frigider stanga
             colider.add(43);
             colider.add(i);
             colider.add(24);
             colider.add(i);
         }
 
+        for (int i = 54; i <= 74; i++) { // frigider dreapta
+            colider.add(i);
+            colider.add(65);
+            colider.add(i);
+            colider.add(76);
+        }
+        for (int i = 65; i <= 76; i++) { // frigider dreapta
+            colider.add(54);
+            colider.add(i);
+            colider.add(74);
+            colider.add(i);
+        }
+
+         blocked = new int[colider.size()][2];
         for (int i = 0; i < colider.size() / 2 ; i++)
             for (int j = 0; j < 2; j++)
-                block[i][j]=colider.get(i*2+j);
+                blocked[i][j]=colider.get(i*2+j);
     }
 
     public static final int DIAGONAL_COST = 14;
@@ -174,7 +221,7 @@ public class AStarPathFinder {
     ei, ej = end location's x and y coordinates
     int[][] blocked = array containing inaccessible cell coordinates
     */
-    public static Cell getPath(int x, int y, int si, int sj, int ei, int ej, int[][] blocked) {
+    public static Cell getPath(int x, int y, int si, int sj, int ei, int ej) {
 
         initializeBlocked();
         //Reset
@@ -205,7 +252,7 @@ public class AStarPathFinder {
              Set blocked cells. Simply set the cell values to null
              for blocked cells.
            */
-        for (int i = 0; i < 100/* blocked.length*/; ++i) { // TODO: 23.04.2017 de rezolvat 100
+        for (int i = 0; i <  blocked.length; ++i) { // TODO: 23.04.2017 de rezolvat 100
             setBlocked(blocked[i][0], blocked[i][1]);
         }
 
@@ -216,9 +263,7 @@ public class AStarPathFinder {
             System.out.println("Path: ");
             Cell current = grid[endI][endJ];
             return current;
-            /*while(current.parent!=null){
-                current = current.parent;
-            }*/
+
         } else return null;
     }
 
