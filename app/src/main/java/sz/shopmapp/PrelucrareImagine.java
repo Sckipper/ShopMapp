@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Point;
 import android.graphics.Rect;
+import android.graphics.Typeface;
 import android.util.DebugUtils;
 import android.util.Log;
 
@@ -112,6 +113,7 @@ public class PrelucrareImagine {
         rectPaint1.setStyle(Paint.Style.STROKE);
 
         Paint textPaint = new Paint();
+        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(Color.BLACK);
@@ -176,6 +178,7 @@ public class PrelucrareImagine {
         rectPaint1.setStyle(Paint.Style.STROKE);
 
         Paint textPaint = new Paint();
+        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(Color.BLACK);
@@ -234,8 +237,8 @@ public class PrelucrareImagine {
         circlePaint.setColor(Color.GREEN);
         circlePaint.setStyle(Paint.Style.FILL);
         // desenare traseu verde
-        Point start = new Point(23,85);
-        Point fin = new Point(740,830);
+        Point start = new Point(239,85);
+        Point fin = new Point(734,85);
         for (Point p : puncte
              ) {
             AStarPathFinder.Cell puncteVerzi = AStarPathFinder.getPath(101, 101, start.x/10, start.y/10, p.x/10, p.y/10);
@@ -246,7 +249,12 @@ public class PrelucrareImagine {
             }
             start = p;
         }
+        AStarPathFinder.Cell puncteVerzi = AStarPathFinder.getPath(101, 101, start.x/10, start.y/10, fin.x/10, fin.y/10);
 
+        while(puncteVerzi!=null) {
+            c.drawCircle(puncteVerzi.i*10,puncteVerzi.j*10, 5,circlePaint);
+            puncteVerzi = puncteVerzi.parent;
+        }
 
         return bm;
     }
@@ -312,13 +320,17 @@ public class PrelucrareImagine {
         rectPaint.setStyle(Paint.Style.STROKE);
 
         Paint textPaint = new Paint();
-        textPaint.setColor(Color.WHITE);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setColor(Color.BLACK);
         textPaint.setTextSize(15);
 
+        Paint backPaint = new Paint();
+        backPaint.setColor(Color.rgb(194, 216, 252));
+        backPaint.setStyle(Paint.Style.FILL);
+        backPaint.setAlpha(150);
 
         Paint testPaint = new Paint();
+        textPaint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
         testPaint.setColor(Color.GREEN);
         testPaint.setStrokeWidth(6F);
         testPaint.setStyle(Paint.Style.FILL);
@@ -348,7 +360,7 @@ public class PrelucrareImagine {
                     //c.drawCircle(newRect.right,newRect.centerY(),20,testPaint);
                     puncte.add(new Point(r.right + 10, r.centerY()));
                 } else if (raionAcces.get(index).compareTo("stanga") == 0) {
-                    c.drawCircle(r.left, r.centerY(), 20, testPaint);
+                    //c.drawCircle(r.left, r.centerY(), 20, testPaint);
                     puncte.add(new Point(r.left - 10, r.centerY()));
                 }
             } else {
@@ -369,10 +381,10 @@ public class PrelucrareImagine {
                             Rect newRect = new Rect(r.left + xdiff * i, r.top, r.left + xdiff * (i + 1), r.bottom);
 
                             c.drawRect(newRect, rectPaint);
+                            c.drawRect(newRect.left,newRect.top,newRect.right,newRect.top + denumiri.size() * 12,backPaint);
                             int count = 1;
                             for (String s : denumiri
                                     ) {
-                                //c.drawRect(newRect.left, newRect.top + count * 12, newRect.right, newRect/top);
                                 c.drawText(s, newRect.left, newRect.top + count * 12, textPaint);
                                 count++;
                             }
@@ -396,6 +408,7 @@ public class PrelucrareImagine {
                             Rect newRect = new Rect(r.left, r.top + ydiff * i, r.right, r.top + ydiff * (i + 1));
                             c.drawRect(newRect, rectPaint);
                             int count = 2;
+                            c.drawRect(newRect.left,newRect.top,newRect.right,newRect.top + (denumiri.size() + 2) * 12,backPaint);
                             for (String s : denumiri
                                     ) {
                                 c.drawText(s, newRect.left, newRect.top + count * 12, textPaint);
@@ -405,7 +418,7 @@ public class PrelucrareImagine {
                                 //c.drawCircle(newRect.right,newRect.centerY(),20,testPaint);
                                 puncte.add(new Point(newRect.right + 10, newRect.centerY()));
                             } else if (raionAcces.get(index).compareTo("stanga") == 0) {
-                                c.drawCircle(newRect.left, newRect.centerY(), 20, testPaint);
+                                //c.drawCircle(newRect.left, newRect.centerY(), 20, testPaint);
                                 puncte.add(new Point(newRect.left - 10, newRect.centerY()));
                             }
                         }

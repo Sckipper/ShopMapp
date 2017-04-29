@@ -68,15 +68,6 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Button btnTest = (Button) findViewById(R.id.button3);
-        btnTest.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent myIntent = new Intent(view.getContext(), GenerareImagineActivity.class);
-                startActivityForResult(myIntent, 0);
-
-            }
-        });
 
         Button btnListaCumparaturi = (Button) findViewById(R.id.button2);
         btnListaCumparaturi.setOnClickListener(new View.OnClickListener() {

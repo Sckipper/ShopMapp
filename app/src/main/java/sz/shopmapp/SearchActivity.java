@@ -7,6 +7,7 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
@@ -53,6 +54,8 @@ public class SearchActivity extends Activity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.cauta_produs);
+        this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
         products = new ArrayList<>();
         productsID = new ArrayList<>();
         productsType = new ArrayList<>();
