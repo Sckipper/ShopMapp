@@ -22,7 +22,6 @@ import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 public class ProductDetailsActivity extends Activity {
     Produs produsCurent = null;
     Categorie categorieCurenta = null;
-    String type;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
