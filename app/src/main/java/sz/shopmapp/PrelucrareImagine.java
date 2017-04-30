@@ -17,10 +17,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
 
-/**
- * Created by tavi2 on 22-04-2017.
- */
-
 public class PrelucrareImagine {
     private Bitmap initialImage;
 
@@ -41,7 +37,6 @@ public class PrelucrareImagine {
 
     public Bitmap Prelucrare(){
         Bitmap bm = initialImage.copy(Bitmap.Config.ARGB_8888, true);    //prelucrare pe bm si returnare imagine pentru afisat
-        Log.d("Android: ",bm.getHeight() + " " + bm.getWidth());
         Canvas c = new Canvas(bm);
 
         Paint rectPaint = new Paint();
@@ -230,7 +225,6 @@ public class PrelucrareImagine {
 
         bm = ImpartirePentruDesenat(bm);
         Canvas c = new Canvas(bm);
-        Log.d("Android: ",bm.getWidth() + " x " + bm.getHeight() + "");
 
         Paint circlePaint = new Paint();
         circlePaint.setAntiAlias(true);
@@ -460,18 +454,6 @@ public class PrelucrareImagine {
 
         public void addCat(Categorie c){
             listaCat.add(c);
-        }
-
-        public void Show(){
-            Log.d("Android: ", "raion:" + raion + " raft:" + raft);
-            for (Categorie c:listaCat
-                 ) {
-                Log.d("Android: ",c.getDenumire());
-            }
-            for (Produs p: listaProd
-                 ) {
-                Log.d("Android: ",p.getDenumire());
-            }
         }
 
         public ArrayList<String> getStringList(){

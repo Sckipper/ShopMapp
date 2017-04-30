@@ -27,10 +27,6 @@ public class GenerareImagineActivity extends Activity {
             Log.d("Android: ", e.toString());
         }
 
-        if(produsCurent == null)
-            Log.d("Android: ", "nu e produs");
-        if(categorieCurenta == null)
-            Log.d("Android: ","nu e categ");
         if(produsCurent == null && categorieCurenta == null) {  //afisez harta cu produsele din lista
             PrelucrareImagine pi = new PrelucrareImagine(BitmapFactory.decodeResource(getResources(), R.drawable.magazin));
             ZoomableImageView touch = (ZoomableImageView) findViewById(R.id.imageEnhance);

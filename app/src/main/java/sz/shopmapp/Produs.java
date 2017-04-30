@@ -4,10 +4,6 @@ import android.util.Log;
 
 import java.io.Serializable;
 
-/**
- * Created by tavi2 on 09.04.2017.
- */
-
 public class Produs implements Serializable{
     int id;
     int categorieID;
@@ -29,10 +25,6 @@ public class Produs implements Serializable{
         dataExpirare = de;
         descriere = des;
         imagine = img;
-    }
-
-    public void Show(){
-        Log.d("Android: ",id + " " + categorieID + " " + denumire + " " + pret + " " + cantitate + " " + greutate + " " + descriere + " ");
     }
 
     public String getDenumire(){return denumire;}

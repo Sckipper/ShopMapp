@@ -73,16 +73,6 @@ public class MainActivity extends AppCompatActivity {
         btnListaCumparaturi.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Log.d("Android: ", "Categorii:");
-                for (Categorie c : ListaDeCumparaturi.listaCategorii
-                        ) {
-                    Log.d("Android: ", c.getDenumire());
-                }
-                Log.d("Android: ", "Produse:");
-                for (Produs p : ListaDeCumparaturi.listaProduse
-                        ) {
-                    Log.d("Android: ", p.getDenumire());
-                }
                 Intent myIntent = new Intent(view.getContext(), ListaDeCumparaturiActivity.class);
                 startActivityForResult(myIntent, 0);
             }

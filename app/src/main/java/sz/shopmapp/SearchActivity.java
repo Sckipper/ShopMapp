@@ -31,10 +31,6 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
-/**
- * Created by tavi2 on 08.04.2017.
- */
-
 public class SearchActivity extends Activity {
 
     private ListView lv;
@@ -121,7 +117,6 @@ public class SearchActivity extends Activity {
                                 products.add("        " + p.getDenumire());
                                 productsType.add("produs");
                                 productsID.add(p.getId());
-                                //Log.d("Android: ", "idsc:" + c1.getId() + " idc:" + c.getId() + "pid:" + p.getId() + "pden:" + p.getDenumire() + "c1den:" + c1.getDenumire() + "cden:" + c.getDenumire());
                             }
                         }
                     }

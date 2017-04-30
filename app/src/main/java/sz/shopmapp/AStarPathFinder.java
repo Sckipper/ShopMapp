@@ -7,9 +7,6 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.PriorityQueue;
 
-/**
- * Created by Sckipper on 23.04.2017.
- */
 public class AStarPathFinder {
 
     public static int[][] blocked ;

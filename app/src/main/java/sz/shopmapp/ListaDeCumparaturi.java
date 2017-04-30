@@ -3,10 +3,6 @@ package sz.shopmapp;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by tavi2 on 15-04-2017.
- */
-
 interface ListaDeCumparaturiBooleanChangedListener {
     public void ListaADevenitGoala();
 }

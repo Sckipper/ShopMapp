@@ -18,10 +18,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 
-/**
- * Created by tavi2 on 08.04.2017.
- */
-
 public class JsonTool {
     Activity currentActivity;
 

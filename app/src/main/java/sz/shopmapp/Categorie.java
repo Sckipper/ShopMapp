@@ -4,10 +4,6 @@ import android.util.Log;
 
 import java.io.Serializable;
 
-/**
- * Created by tavi2 on 08.04.2017.
- */
-
 public class Categorie implements Serializable{
     int id;
     int categorieID;
@@ -25,10 +21,6 @@ public class Categorie implements Serializable{
         nrMaxRafturi = nrmr;
         imagine = img;
         descriere = desc;
-    }
-
-    public void Show(){
-        Log.d("Android: ",id + " " + categorieID + " " + denumire + " " + raion + " " + raft);
     }
 
     public String getDenumire(){return denumire;}

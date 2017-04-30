@@ -19,10 +19,6 @@ import java.util.Collections;
 
 import static android.icu.lang.UCharacter.GraphemeClusterBreak.T;
 
-/**
- * Created by tavi2 on 09.04.2017.
- */
-
 public class ProductDetailsActivity extends Activity {
     Produs produsCurent = null;
     Categorie categorieCurenta = null;
@@ -45,7 +41,6 @@ public class ProductDetailsActivity extends Activity {
         String type = getIntent().getExtras().getString("type");
         Integer id = getIntent().getExtras().getInt("id");
         Search(SearchActivity.categorieArrayList,SearchActivity.produsArrayList,type,id);
-        Log.d("Android: ", type + id);
         if(produsCurent != null){       //setez toate view-urile cu informatii sau fara
             TextViewPret.setText("Pret: " + produsCurent.getPret() + " Lei");
             TextViewDenumire.setText(produsCurent.getDenumire());
