@@ -65,30 +65,51 @@ public class PrelucrareImagine {
 
     public void GenerareRect(){     //pentru raionul 1 ArrayList:index:1 => rect pentru primul raion...etc    trebuie neaparat apelata numai pentru initializare arraylist
         //Raion 1
-        rects.add(new Rect(54,124,123,437));
+        //rects.add(new Rect(54,124,123,437));
+        rects.add(new Rect(4,98,98,453));
         rectsOrientation.add("Vertical");
         raionAcces.add("dreapta");
         //Raion 2
-        rects.add(new Rect(337,195,406,588));
+        //rects.add(new Rect(337,195,406,588));
+        rects.add(new Rect(334,180,430,585));
         rectsOrientation.add("Vertical");
         raionAcces.add("stanga");
-        //Raion 3,4,5 puse sa fie
-        rects.add(new Rect()); rects.add(new Rect()); rects.add(new Rect());rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");
-        raionAcces.add("stanga");raionAcces.add("stanga");raionAcces.add("stanga");
-        //Raion 6
-        rects.add(new Rect(122,858,747,927));
-        rectsOrientation.add("Horizontal");
-        raionAcces.add("sus");
-        //Raion 7,8,9 puse sa fie
-        rects.add(new Rect()); rects.add(new Rect()); rects.add(new Rect());rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");
-        raionAcces.add("stanga");raionAcces.add("stanga");raionAcces.add("stanga");
-        //Raion 10
-        rects.add(new Rect(512,187,580,573));
+        //Raion 3
+        rects.add(new Rect(5,572,124,985));
         rectsOrientation.add("Vertical");
         raionAcces.add("dreapta");
-        //Raion 11,12 la fel
-        rects.add(new Rect()); rects.add(new Rect());rectsOrientation.add("Vertical");rectsOrientation.add("Vertical");
-        raionAcces.add("stanga");raionAcces.add("stanga");
+        //Raion 4
+        rects.add(new Rect(244,659,344,765));
+        rectsOrientation.add("Vertical");
+        raionAcces.add("stanga");
+        //Raion 5
+        rects.add(new Rect(350,657,437,769));
+        rectsOrientation.add("Vertical");
+        raionAcces.add("dreapta");
+        //Raion 6
+        rects.add(new Rect(130,859,749,992));
+        rectsOrientation.add("Horizontal");
+        raionAcces.add("sus");
+        //Raion 7
+        rects.add(new Rect(545,657,634,764));
+        rectsOrientation.add("Vertical");
+        raionAcces.add("stanga");
+        //Raion 8
+        rects.add(new Rect(644,657,732,765));
+        rectsOrientation.add("Vertical");
+        raionAcces.add("dreapta");
+        //Raion 9
+        rects.add(new Rect(875,569,992,974));
+        rectsOrientation.add("Vertical");
+        raionAcces.add("stanga");
+        //Raion 10
+        rects.add(new Rect(874,184,994,564));
+        rectsOrientation.add("Vertical");
+        raionAcces.add("stanga");
+        //Raion 11
+        rects.add(new Rect(504,180,584,587));
+        rectsOrientation.add("Vertical");
+        raionAcces.add("dreapta");
     }
 
     public Bitmap DesenareProdus(Produs p){
