@@ -15,4 +15,4 @@ Project is not mantained.
 
 ## Licence ##
 
-Please see [licence file](/LICENCE.md) for more information
+Please see [licence file](/LICENSE.md) for more information
