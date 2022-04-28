@@ -1,4 +1,4 @@
-# ShopMap
+# ShopMapp
 
 Proof Of Concept Android app used for guidance in a market.   
 When you visit a new market or you are in a hurry you just need help.  
