@@ -1,7 +1,7 @@
 # ShopMapp
 
 Proof Of Concept Android app used for guidance in a market.   
-When you visit a new market or you are in a hurry you just need help.  
+When you visit a new market or you are in a hurry or just need help.  
 The ideea is to have an app that can tell you where your certain product is placed in the grocery store. 
 You can also create a shopping list and generate the fastest route in the market. This is done with A* pathfinding algorithm.   
 
